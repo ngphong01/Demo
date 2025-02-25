@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo Menu Đa Cấp</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .nav > li{
+            float: left;
+            margin-right: 15px;
+        }
+        .nav>li>a {
+            text-transform: uppercase;
+            color: red;
+        }
+        .nav li {
+            position: relative;
+            list-style: none;
+        }
+        .nav li a {
+            text-decoration: none;
+            padding: 10px;
+            display: inline-block;
+            line-height: 20px;
+        }
+        .nav .menu{
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 100%;
+  width: 200px;
+  background-color: #eee;
+  padding: 5px 20px;
+}
+
+.nav li:hover>.menu{
+  display: block;
+}
+
+.nav>li>.menu{
+  top: 40px;
+  left: 0;
+}
+
+.test {
+  display: inline-block;
+  color: red;
+  font-size: 18px;
+}
+
+.tooltip-wrapper {
+  position: relative;
+  cursor: pointer;
+}
+
+.tooltip {
+  display: none;
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 20px;
+  white-space: nowrap;
+}
+
+.tooltip::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: #333 transparent transparent transparent;
+}
+
+.tooltip-wrapper:hover .tooltip {
+  display: block;
+}
+    </style>
+</head>
+<body>
+    <ul class="nav">
+        <li><a href="#">Trang Chủ</a></li>
+        <li>
+          <a href="#">Sản Phẩm</a>
+          <ul class="menu">
+            <li>
+              <a href="#">Hoa Quả</a>
+              <ul class="menu">
+                <li><a href="#">Táo</a></li>
+                <li><a href="#">Xoài</a></li>
+                <li><a href="#">Ổi</a></li>
+              </ul>
+            </li>
+            <li><a href="#">Rau Xanh</a></li>
+            <li><a href="#">Gạo</a></li>
+            <li><a href="#">Đồ Khí</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#">Dịch Vụ</a>
+          <ul class="menu">
+            <li><a href="#">Chăm Sóc Khách Hàng</a></li>
+            <li><a href="#">Hỗ Trợ</a></li>
+            <li><a href="#">Demo</a></li>
+          </ul>
+        </li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Lien Hệ</a></li>
+      </ul>
+      <br/>
+      <div class="test">
+        <span class="tooltip-wrapper">Anh Phong<span class="tooltip">Ptit</span></span>
+      </div>
+</body>
+</html>
