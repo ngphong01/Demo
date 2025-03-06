@@ -1,0 +1,3157 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đồng hồ Báo Thức Online</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        /* Bảng màu đẹp mới */
+        :root {
+            --primary-color: #1e3799;
+            --secondary-color: #4a69bd;
+            --accent-color: #eb2f06;
+            --gradient-start: #0c2461;
+            --gradient-end: #1e3799;
+            --background-color: #0a0f1e;
+            --sidebar-color: #0c1631;
+            --text-color: #f5f6fa;
+            --button-hover: #3498db;
+            --card-bg: rgba(14, 30, 65, 0.8);
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --info-color: #3498db;
+            --night-color: #c0392b;
+            --glow-color: rgba(74, 105, 189, 0.6);
+        }
+
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.05);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes glow {
+            0% {
+                box-shadow: 0 0 5px var(--glow-color);
+            }
+
+            50% {
+                box-shadow: 0 0 20px var(--glow-color), 0 0 30px var(--glow-color);
+            }
+
+            100% {
+                box-shadow: 0 0 5px var(--glow-color);
+            }
+        }
+
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: var(--sidebar-color);
+            padding: 20px;
+            box-sizing: border-box;
+            box-shadow: 2px 0 15px rgba(0, 0, 0, 0.4);
+            z-index: 10;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .sidebar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(74, 105, 189, 0.1), rgba(30, 55, 153, 0.2));
+            z-index: -1;
+        }
+
+        .sidebar-header {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sidebar-header i {
+            animation: rotate 20s linear infinite;
+            display: inline-block;
+            margin-right: 10px;
+            color: var(--secondary-color);
+        }
+
+        .sidebar ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            padding: 12px 10px;
+            cursor: pointer;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .sidebar ul li::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: all 0.5s;
+        }
+
+        .sidebar ul li:hover::before {
+            left: 100%;
+        }
+
+        .sidebar ul li i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+            color: var(--secondary-color);
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar ul li:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px) scale(1.02);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .sidebar ul li:hover i {
+            transform: scale(1.2);
+        }
+
+        .sidebar ul li.active {
+            background: linear-gradient(90deg, var(--secondary-color), var(--primary-color));
+            color: white;
+            box-shadow: 0 4px 15px rgba(74, 105, 189, 0.5);
+        }
+
+        .sidebar ul li.active i {
+            color: white;
+        }
+
+        .content {
+            flex-grow: 1;
+            padding: 30px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: var(--background-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(14, 30, 65, 0.5), transparent 60%);
+            z-index: -1;
+        }
+
+        .clock-container {
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 0 20px rgba(74, 105, 189, 0.3);
+            width: 90%;
+            max-width: 600px;
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.8s ease-out;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .clock-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(74, 105, 189, 0.1), transparent 70%);
+            opacity: 0.7;
+            z-index: -1;
+        }
+
+        .title {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: var(--secondary-color);
+            font-weight: 600;
+            text-shadow: 0 0 10px rgba(74, 105, 189, 0.5);
+            position: relative;
+            display: inline-block;
+        }
+
+        .title::after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--secondary-color), transparent);
+            bottom: -5px;
+            left: 25%;
+        }
+
+        .time {
+            font-size: 80px;
+            font-weight: bold;
+            margin: 20px 0;
+            color: var(--text-color);
+            text-shadow: 0 0 15px rgba(74, 105, 189, 0.7);
+            animation: pulse 2s infinite ease-in-out;
+            position: relative;
+        }
+
+        .time::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(74, 105, 189, 0.2), transparent 70%);
+            top: 0;
+            left: 0;
+            z-index: -1;
+            animation: pulse 2s infinite ease-in-out;
+            animation-delay: 1s;
+        }
+
+        .date {
+            font-size: 18px;
+            margin-bottom: 30px;
+            color: #bdc3c7;
+            position: relative;
+            display: inline-block;
+        }
+
+        .time-selection {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+            width: 100%;
+            animation: fadeIn 1s ease-out;
+            animation-delay: 0.2s;
+            opacity: 1;
+        }
+
+        .time-select {
+            background-color: rgba(14, 30, 65, 0.8);
+            color: var(--text-color);
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            font-size: 18px;
+            cursor: pointer;
+            width: 45%;
+            text-align: center;
+            height: 50px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .time-select:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 15px rgba(74, 105, 189, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .time-select:hover {
+            background-color: rgba(20, 40, 80, 0.8);
+            transform: translateY(-2px);
+        }
+
+        .date-selection {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            width: 100%;
+            animation: fadeIn 1s ease-out;
+            animation-delay: 0.4s;
+            opacity: 1;
+        }
+
+        .date-label {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            padding: 0 10px;
+            margin-bottom: 5px;
+            color: #bdc3c7;
+        }
+
+        .date-label span {
+            width: 32%;
+            text-align: center;
+        }
+
+        .form-section {
+            margin-top: 20px;
+            width: 100%;
+            animation: fadeIn 1s ease-out;
+            animation-delay: 0.6s;
+            opacity: 1;
+        }
+
+        .form-section label {
+            display: block;
+            margin-bottom: 10px;
+            text-align: left;
+            font-size: 16px;
+            color: #bdc3c7;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .form-section label i {
+            position: absolute;
+            left: 0;
+            top: 2px;
+            color: var(--secondary-color);
+        }
+
+        .form-section select,
+        .form-section input {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            background-color: rgba(14, 30, 65, 0.8);
+            color: var(--text-color);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            font-size: 16px;
+            height: 50px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .form-section select:focus,
+        .form-section input:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 15px rgba(74, 105, 189, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .form-section input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .button {
+            background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(74, 105, 189, 0.5);
+            width: 100%;
+            height: 60px;
+            margin-top: 10px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.5s;
+        }
+
+        .button:hover::before {
+            left: 100%;
+        }
+
+        .button i {
+            margin-right: 10px;
+            font-size: 20px;
+            animation: float 2s infinite ease-in-out;
+        }
+
+        .button:hover {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(74, 105, 189, 0.7);
+        }
+
+        .button:active {
+            transform: translateY(0);
+            box-shadow: 0 4px 10px rgba(74, 105, 189, 0.5);
+        }
+
+        .footer {
+            margin-top: 30px;
+            font-size: 14px;
+            color: #95a5a6;
+            animation: fadeIn 1s ease-out;
+            animation-delay: 1s;
+            opacity: 1;
+        }
+
+        .alarms-list {
+            margin-top: 30px;
+            width: 100%;
+            text-align: left;
+            animation: fadeIn 1s ease-out;
+            animation-delay: 0.8s;
+            opacity: 1;
+        }
+
+        .alarms-list h3 {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            color: var(--secondary-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .alarms-list h3 i {
+            margin-right: 10px;
+            color: var(--secondary-color);
+        }
+
+        .alarm-item {
+            background-color: rgba(14, 30, 65, 0.6);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .alarm-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+            background-color: rgba(20, 40, 80, 0.6);
+        }
+
+        .alarm-time {
+            font-size: 22px;
+            font-weight: bold;
+            color: var(--text-color);
+            text-shadow: 0 0 5px rgba(74, 105, 189, 0.5);
+        }
+
+        .alarm-name {
+            color: #bdc3c7;
+            font-size: 16px;
+            margin-top: 5px;
+        }
+
+        .alarm-sound {
+            color: #95a5a6;
+            font-size: 14px;
+            margin-top: 3px;
+            font-style: italic;
+            display: flex;
+            align-items: center;
+        }
+
+        .alarm-sound::before {
+            content: '\f028';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            margin-right: 5px;
+            color: var(--secondary-color);
+            font-size: 12px;
+        }
+
+        .alarm-actions button {
+            background-color: rgba(231, 76, 60, 0.2);
+            border: none;
+            color: var(--accent-color);
+            cursor: pointer;
+            font-size: 18px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .alarm-actions button:hover {
+            background-color: rgba(231, 76, 60, 0.4);
+            transform: scale(1.1);
+        }
+
+        .alarm-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(45deg, var(--accent-color), #d63031);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 25px rgba(231, 76, 60, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 100;
+            opacity: 0;
+            transform: translateX(100px);
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            min-width: 350px;
+        }
+
+        .alarm-notification.show {
+            opacity: 1;
+            transform: translateX(0);
+            animation: glow 2s infinite;
+        }
+
+        .alarm-notification::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(231, 76, 60, 0.3), transparent 70%);
+            border-radius: 12px;
+            z-index: -1;
+        }
+
+        .alarm-notification button {
+            background-color: white;
+            color: var(--accent-color);
+            border: none;
+            border-radius: 8px;
+            padding: 10px 18px;
+            margin-left: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .alarm-notification button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        /* CSS cho hiệu ứng chuyển trang */
+        .page-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            transition: transform 0.7s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.7s ease;
+        }
+
+        .page-container.slide-out {
+            transform: translateX(-100%) scale(0.9);
+            opacity: 0;
+        }
+
+        .page-container.slide-in {
+            transform: translateX(0) scale(1);
+            opacity: 1;
+        }
+
+        .page-container.hidden {
+            display: none;
+        }
+
+        .countdown-page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transform: translateX(100%) scale(0.9);
+            opacity: 0;
+            transition: transform 0.7s cubic-bezier(0.68, -0.55, 0.27, 1.55), opacity 0.7s ease;
+            z-index: 50;
+        }
+
+        .countdown-page.active {
+            transform: translateX(0) scale(1);
+            opacity: 1;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 18px;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 60;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .back-button:hover {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .back-button i {
+            transition: transform 0.3s ease;
+        }
+
+        .back-button:hover i {
+            transform: translateX(-3px);
+        }
+
+        .countdown-container {
+            position: relative;
+            top: 0;
+            left: 0;
+            transform: none;
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(74, 105, 189, 0.4);
+            width: 90%;
+            max-width: 650px;
+            backdrop-filter: blur(10px);
+            margin: 0 auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeIn 0.8s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .countdown-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(74, 105, 189, 0.2), transparent 70%);
+            opacity: 0.7;
+            z-index: -1;
+            animation: pulse 10s infinite ease-in-out;
+        }
+
+        /* Vòng tròn đếm ngược lớn hơn */
+        .countdown-circle {
+            position: relative;
+            width: 450px;
+            height: 450px;
+            margin: 20px auto;
+            animation: float 6s infinite ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .countdown-circle svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+            filter: drop-shadow(0 0 10px rgba(74, 105, 189, 0.5));
+        }
+
+        .countdown-circle circle {
+            fill: none;
+            stroke-width: 12;
+            stroke-linecap: round;
+            transform-origin: center;
+        }
+
+        .countdown-circle .background-circle {
+            stroke: rgba(255, 255, 255, 0.1);
+        }
+
+        .countdown-circle .progress-circle {
+            stroke: url(#gradient);
+            stroke-dasharray: 1131;
+            stroke-dashoffset: 1131;
+            transition: stroke-dashoffset 1s linear;
+            filter: drop-shadow(0 0 8px rgba(74, 105, 189, 0.8));
+        }
+
+        .countdown-time {
+            position: absolute;
+            font-size: 90px;
+            font-weight: bold;
+            color: var(--text-color);
+            text-shadow: 0 0 20px rgba(74, 105, 189, 0.8);
+            animation: pulse 2s infinite ease-in-out;
+            z-index: 2;
+        }
+
+        .countdown-alarm-time {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: #f39c12;
+            margin: 15px 0;
+            text-shadow: 0 0 10px rgba(243, 156, 18, 0.5);
+        }
+
+        .countdown-alarm-time i {
+            margin-right: 10px;
+            font-size: 24px;
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 15px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin: 25px 0;
+            overflow: hidden;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-color), #d63031);
+            width: 0%;
+            transition: width 1s linear;
+            box-shadow: 0 0 15px rgba(231, 76, 60, 0.8);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: float 2s infinite linear;
+        }
+
+        .progress-bar-text {
+            font-size: 18px;
+            color: #bdc3c7;
+            margin: 15px 0 25px;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .stop-button {
+            background: linear-gradient(45deg, var(--accent-color), #d63031);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(231, 76, 60, 0.5);
+            width: 100%;
+            height: 70px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stop-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.5s;
+        }
+
+        .stop-button:hover::before {
+            left: 100%;
+        }
+
+        .stop-button i {
+            margin-right: 10px;
+            font-size: 24px;
+            transition: transform 0.3s ease;
+        }
+
+        .stop-button:hover {
+            background: linear-gradient(45deg, #d63031, var(--accent-color));
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 6px 25px rgba(231, 76, 60, 0.7);
+        }
+
+        .stop-button:hover i {
+            transform: scale(1.2);
+        }
+
+        .countdown-page-title {
+            font-size: 36px;
+            color: var(--text-color);
+            margin-bottom: 30px;
+            text-shadow: 0 0 15px rgba(74, 105, 189, 0.8);
+            position: relative;
+            display: inline-block;
+            animation: float 4s infinite ease-in-out;
+        }
+
+        .countdown-page-title::after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--secondary-color), transparent);
+            bottom: -10px;
+            left: 25%;
+        }
+
+        /* CSS cho các tính năng bổ sung */
+        .feature-container {
+            display: none;
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 0 20px rgba(74, 105, 189, 0.3);
+            width: 90%;
+            max-width: 600px;
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.8s ease-out;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(74, 105, 189, 0.1), transparent 70%);
+            opacity: 0.7;
+            z-index: -1;
+        }
+
+        .feature-container.active {
+            display: block;
+        }
+
+        /* Đồng hồ đêm */
+        .night-clock {
+            background: linear-gradient(135deg, #221c6b, #094989);
+            color: rgba(42, 8, 217, 0.7);
+            text-shadow: 0 0 10px rgba(219, 61, 8, 0.5);
+        }
+
+        .night-clock .time {
+            color: rgba(108, 6, 70, 0.9);
+            text-shadow: 0 0 20px rgba(30, 5, 121, 0.7);
+        }
+
+        .night-clock::before {
+            background: radial-gradient(circle at center, rgba(237, 21, 183, 0.1), transparent 70%);
+        }
+
+        /* Đồng hồ bấm giờ */
+        .stopwatch-display {
+            font-size: 80px;
+            font-weight: bold;
+            margin: 30px 0;
+            color: var(--text-color);
+            text-shadow: 0 0 15px rgba(74, 105, 189, 0.7);
+            animation: pulse 2s infinite ease-in-out;
+            position: relative;
+        }
+
+        .stopwatch-controls {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .stopwatch-button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stopwatch-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.5s;
+        }
+
+        .stopwatch-button:hover::before {
+            left: 100%;
+        }
+
+        .stopwatch-button i {
+            margin-right: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .stopwatch-button:hover i {
+            transform: scale(1.2);
+        }
+
+        .start-button {
+            background: linear-gradient(45deg, #27ae60, #2ecc71);
+            color: white;
+            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.5);
+        }
+
+        .start-button:hover {
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(46, 204, 113, 0.7);
+        }
+
+        .pause-button {
+            background: linear-gradient(45deg, #f39c12, #f1c40f);
+            color: white;
+            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.5);
+        }
+
+        .pause-button:hover {
+            background: linear-gradient(45deg, #f1c40f, #f39c12);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(243, 156, 18, 0.7);
+        }
+
+        .reset-button {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+            color: white;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.5);
+        }
+
+        .reset-button:hover {
+            background: linear-gradient(45deg, #c0392b, #e74c3c);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.7);
+        }
+
+        .lap-button {
+            background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
+            color: white;
+            box-shadow: 0 4px 15px rgba(74, 105, 189, 0.5);
+        }
+
+        .lap-button:hover {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(74, 105, 189, 0.7);
+        }
+
+        .laps-container {
+            margin-top: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+            text-align: left;
+            background-color: rgba(14, 30, 65, 0.5);
+            border-radius: 10px;
+            padding: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .lap-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeIn 0.5s ease-out;
+            transition: all 0.3s ease;
+        }
+
+        .lap-item:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            transform: translateX(5px);
+        }
+
+        /* Đồng hồ thế giới */
+        .world-clocks {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .world-clock-item {
+            background-color: rgba(14, 30, 65, 0.8);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+            animation: fadeIn 0.5s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .world-clock-item::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(74, 105, 189, 0.1), transparent 70%);
+            opacity: 0.7;
+            z-index: -1;
+        }
+
+        .world-clock-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .world-clock-city {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: var(--secondary-color);
+            font-weight: bold;
+            position: relative;
+            display: inline-block;
+        }
+
+        .world-clock-city::after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--secondary-color), transparent);
+            bottom: -5px;
+            left: 25%;
+        }
+
+        .world-clock-time {
+            font-size: 30px;
+            font-weight: bold;
+            margin: 10px 0;
+            color: var(--text-color);
+            text-shadow: 0 0 10px rgba(74, 105, 189, 0.5);
+        }
+
+        .world-clock-date {
+            font-size: 14px;
+            color: #bdc3c7;
+            margin-top: 5px;
+        }
+
+        /* Lịch */
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .calendar-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--text-color);
+            text-shadow: 0 0 10px rgba(74, 105, 189, 0.5);
+        }
+
+        .calendar-nav {
+            display: flex;
+            gap: 10px;
+        }
+
+        .calendar-nav-btn {
+            background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 15px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .calendar-nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .calendar-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: bold;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .calendar-day {
+            background-color: rgba(14, 30, 65, 0.8);
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .calendar-day:hover {
+            background-color: rgba(74, 105, 189, 0.3);
+            transform: scale(1.05);
+        }
+
+        .calendar-day.today {
+            background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
+            color: white;
+            box-shadow: 0 0 15px rgba(74, 105, 189, 0.5);
+            animation: pulse 2s infinite;
+        }
+
+        .calendar-day.other-month {
+            opacity: 0.5;
+        }
+
+        .timer-container {
+            text-align: center;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .timer-display {
+            font-size: 80px;
+            font-weight: bold;
+            margin: 30px 0;
+            color: var(--text-color);
+            text-shadow: 0 0 15px rgba(74, 105, 189, 0.7);
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        .timer-inputs {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .timer-input {
+            width: 80px;
+            text-align: center;
+            font-size: 20px;
+            padding: 12px;
+            border-radius: 10px;
+            background-color: rgba(14, 30, 65, 0.8);
+            color: var(--text-color);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .timer-input:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 15px rgba(74, 105, 189, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .timer-label {
+            display: block;
+            font-size: 14px;
+            margin-top: 5px;
+            color: #bdc3c7;
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                padding: 10px;
+            }
+
+            .sidebar ul {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .sidebar ul li {
+                margin: 5px;
+                padding: 8px 12px;
+                font-size: 14px;
+            }
+
+            .time {
+                font-size: 60px;
+            }
+
+            .content {
+                padding: 15px;
+            }
+
+            .time-select {
+                font-size: 16px;
+            }
+
+            .date-select {
+                font-size: 16px;
+            }
+
+            .countdown-circle {
+                width: 280px;
+                height: 280px;
+            }
+
+            .countdown-time {
+                font-size: 60px;
+            }
+
+            .countdown-page-title {
+                font-size: 28px;
+                margin-top: 60px;
+            }
+
+            .world-clocks {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 12px;
+            z-index: 20;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+
+            .sidebar {
+                position: fixed;
+                left: -250px;
+                height: 100%;
+                transition: left 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+                z-index: 30;
+            }
+
+            .sidebar.active {
+                left: 0;
+            }
+
+            .content {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Trang chính -->
+    <div class="page-container" id="mainPage">
+        <button class="menu-toggle" id="menuToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <div class="container">
+            <div class="sidebar" id="sidebar">
+                <div class="sidebar-header">
+                    <i class="fas fa-clock"></i> Đồng hồ Online
+                </div>
+                <ul>
+                    <li class="active" data-feature="alarm">
+                        <i class="fas fa-bell"></i> Đồng hồ Báo Thức Online
+                    </li>
+                    <li data-feature="night-clock">
+                        <i class="fas fa-moon"></i> Đồng hồ Đêm
+                    </li>
+                    <li data-feature="day-night">
+                        <i class="fas fa-sun"></i> Đồng hồ Ngày/Đêm
+                    </li>
+                    <li data-feature="stopwatch">
+                        <i class="fas fa-stopwatch"></i> Đồng hồ Bấm giờ
+                    </li>
+                    <li data-feature="timer">
+                        <i class="fas fa-hourglass-half"></i> Đồng hồ Hẹn giờ
+                    </li>
+                    <li data-feature="world-clock">
+                        <i class="fas fa-globe"></i> Đồng hồ Thế giới
+                    </li>
+                    <li data-feature="date-calculator">
+                        <i class="fas fa-calendar-alt"></i> Tính ngày
+                    </li>
+                    <li data-feature="time-calculator">
+                        <i class="fas fa-calculator"></i> Máy tính thời gian
+                    </li>
+                    <li data-feature="pomodoro">
+                        <i class="fas fa-tasks"></i> Bấm giờ Pomodoro
+                    </li>
+                    <li data-feature="calendar">
+                        <i class="far fa-calendar-check"></i> Lịch 2025
+                    </li>
+                </ul>
+            </div>
+            <div class="content" id="mainContent">
+                <!-- Đồng hồ Báo Thức -->
+                <div class="feature-container active" id="alarm-feature">
+                    <div class="title">
+                        Đồng hồ Báo Thức Online<br /><span id="date" class="date"></span>
+                    </div>
+                    <div class="time" id="clock">18:00:00</div>
+
+                    <div class="time-label">
+                        <span>Giờ</span>
+                        <span>Phút</span>
+                    </div>
+                    <div class="time-selection">
+                        <select class="time-select" id="hourSelect">
+                            <option value="00">00</option>
+                            <option value="01">01</option>
+                            <option value="02">02</option>
+                            <option value="03">03</option>
+                            <option value="04">04</option>
+                            <option value="05">05</option>
+                            <option value="06">06</option>
+                            <option value="07">07</option>
+                            <option value="08">08</option>
+                            <option value="09">09</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18" selected>18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                            <option value="21">21</option>
+                            <option value="22">22</option>
+                            <option value="23">23</option>
+                        </select>
+                        <select class="time-select" id="minuteSelect">
+                            <option value="00">00</option>
+                            <option value="01">01</option>
+                            <option value="02">02</option>
+                            <option value="03">03</option>
+                            <option value="04">04</option>
+                            <option value="05">05</option>
+                            <option value="06">06</option>
+                            <option value="07">07</option>
+                            <option value="08">08</option>
+                            <option value="09">09</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15" selected>15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                            <option value="21">21</option>
+                            <option value="22">22</option>
+                            <option value="23">23</option>
+                            <option value="24">24</option>
+                            <option value="25">25</option>
+                            <option value="26">26</option>
+                            <option value="27">27</option>
+                            <option value="28">28</option>
+                            <option value="29">29</option>
+                            <option value="30">30</option>
+                            <option value="31">31</option>
+                            <option value="32">32</option>
+                            <option value="33">33</option>
+                            <option value="34">34</option>
+                            <option value="35">35</option>
+                            <option value="36">36</option>
+                            <option value="37">37</option>
+                            <option value="38">38</option>
+                            <option value="39">39</option>
+                            <option value="40">40</option>
+                            <option value="41">41</option>
+                            <option value="42">42</option>
+                            <option value="43">43</option>
+                            <option value="44">44</option>
+                            <option value="45">45</option>
+                            <option value="46">46</option>
+                            <option value="47">47</option>
+                            <option value="48">48</option>
+                            <option value="49">49</option>
+                            <option value="50">50</option>
+                            <option value="51">51</option>
+                            <option value="52">52</option>
+                            <option value="53">53</option>
+                            <option value="54">54</option>
+                            <option value="55">55</option>
+                            <option value="56">56</option>
+                            <option value="57">57</option>
+                            <option value="58">58</option>
+                            <option value="59">59</option>
+                        </select>
+                    </div>
+
+                    <div class="date-label">
+                        <span>Ngày</span>
+                        <span>Tháng</span>
+                        <span>Năm</span>
+                    </div>
+                    <div class="date-selection">
+                        <select class="time-select date-select" id="daySelect">
+                            <!-- Ngày sẽ được tạo động -->
+                        </select>
+                        <select class="time-select date-select" id="monthSelect">
+                            <option value="01">01</option>
+                            <option value="02">02</option>
+                            <option value="03">03</option>
+                            <option value="04">04</option>
+                            <option value="05">05</option>
+                            <option value="06">06</option>
+                            <option value="07">07</option>
+                            <option value="08">08</option>
+                            <option value="09">09</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                        </select>
+                        <select class="time-select date-select" id="yearSelect">
+                            <!-- Năm sẽ được tạo động -->
+                        </select>
+                    </div>
+
+                    <div class="form-section">
+                        <label><i class="fas fa-volume-up"></i> Âm thanh báo thức</label>
+                        <select class="time-select" id="soundSelect">
+                            <option value="fire_alarm">Báo động cháy</option>
+                            <option value="siren">Còi hú khẩn cấp</option>
+                            <option value="loud_beep">Tiếng bíp cực to</option>
+                            <option value="air_horn">Kèn không khí</option>
+                            <option value="military">Kèn quân đội</option>
+                            <option value="nuclear">Cảnh báo hạt nhân</option>
+                            <option value="classic">Báo thức cổ điển</option>
+                            <option value="police">Còi cảnh sát</option>
+                        </select>
+
+                        <label><i class="fas fa-tag"></i> Tên báo thức</label>
+                        <input type="text" id="alarmName" placeholder="Nhập tên báo thức (ví dụ: Thức dậy)" />
+                        <button class="button" id="setAlarmBtn">
+                            <i class="fas fa-bell"></i> Đặt báo thức
+                        </button>
+                    </div>
+
+                    <div class="alarms-list" id="alarmsList">
+                        <h3><i class="fas fa-list"></i> Danh sách báo thức</h3>
+                        <div id="alarmsContainer">
+                            <!-- Danh sách báo thức sẽ được thêm vào đây -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Đồng hồ Đêm -->
+                <div class="feature-container night-clock" id="night-clock-feature">
+                    <div class="title">Đồng hồ Đêm</div>
+                    <div class="time" id="nightClock">18:00:00</div>
+                    <div class="date" id="nightDate"></div>
+                    <p>Đồng hồ với màu đỏ dịu giúp bảo vệ mắt trong đêm tối</p>
+                </div>
+
+                <!-- Đồng hồ Ngày/Đêm -->
+                <div class="feature-container" id="day-night-feature">
+                    <div class="title">Đồng hồ Ngày/Đêm</div>
+                    <div class="time" id="dayNightClock">18:00:00</div>
+                    <div class="date" id="dayNightDate"></div>
+                    <div id="dayNightInfo" style="margin-top: 20px; font-size: 18px">
+                        <p>
+                            <i class="fas fa-sun"></i> Bình minh: 05:30 - Hoàng hôn: 18:00
+                        </p>
+                        <p id="dayNightStatus"></p>
+                    </div>
+                </div>
+
+                <!-- Đồng hồ Bấm giờ -->
+                <div class="feature-container" id="stopwatch-feature">
+                    <div class="title">Đồng hồ Bấm giờ</div>
+                    <div class="stopwatch-display" id="stopwatchDisplay">
+                        00:00:00.000
+                    </div>
+                    <div class="stopwatch-controls">
+                        <button class="stopwatch-button start-button" id="startStopwatch">
+                            <i class="fas fa-play"></i> Bắt đầu
+                        </button>
+                        <button class="stopwatch-button pause-button" id="pauseStopwatch" disabled>
+                            <i class="fas fa-pause"></i> Tạm dừng
+                        </button>
+                        <button class="stopwatch-button reset-button" id="resetStopwatch" disabled>
+                            <i class="fas fa-undo"></i> Đặt lại
+                        </button>
+                        <button class="stopwatch-button lap-button" id="lapStopwatch" disabled>
+                            <i class="fas fa-flag"></i> Vòng
+                        </button>
+                    </div>
+                    <div class="laps-container" id="lapsContainer"></div>
+                </div>
+
+                <!-- Đồng hồ Hẹn giờ -->
+                <div class="feature-container" id="timer-feature">
+                    <div class="title">Đồng hồ Hẹn giờ</div>
+                    <div class="timer-display" id="timerDisplay">00:00:00</div>
+                    <div class="timer-inputs">
+                        <div>
+                            <input type="number" class="timer-input" id="hoursInput" min="0" max="23" value="0" />
+                            <span class="timer-label">Giờ</span>
+                        </div>
+                        <div>
+                            <input type="number" class="timer-input" id="minutesInput" min="0" max="59" value="5" />
+                            <span class="timer-label">Phút</span>
+                        </div>
+                        <div>
+                            <input type="number" class="timer-input" id="secondsInput" min="0" max="59" value="0" />
+                            <span class="timer-label">Giây</span>
+                        </div>
+                    </div>
+                    <div class="timer-controls">
+                        <button class="stopwatch-button start-button" id="startTimer">
+                            <i class="fas fa-play"></i> Bắt đầu
+                        </button>
+                        <button class="stopwatch-button pause-button" id="pauseTimer" disabled>
+                            <i class="fas fa-pause"></i> Tạm dừng
+                            <button class="stopwatch-button reset-button" id="resetTimer" disabled>
+                                <i class="fas fa-undo"></i> Đặt lại
+                            </button>
+                    </div>
+                </div>
+
+                <!-- Đồng hồ Thế giới -->
+                <div class="feature-container" id="world-clock-feature">
+                    <div class="title">Đồng hồ Thế giới</div>
+                    <div class="world-clocks" id="worldClocks">
+                        <!-- Đồng hồ thế giới sẽ được thêm vào đây -->
+                    </div>
+                </div>
+
+                <!-- Tính ngày -->
+                <div class="feature-container" id="date-calculator-feature">
+                    <div class="title">Tính ngày</div>
+                    <div class="form-section">
+                        <label>Ngày bắt đầu</label>
+                        <input type="date" id="startDate" class="time-select" />
+
+                        <label>Ngày kết thúc</label>
+                        <input type="date" id="endDate" class="time-select" />
+
+                        <button class="button" id="calculateDaysBtn">
+                            <i class="fas fa-calculator"></i> Tính số ngày
+                        </button>
+
+                        <div id="daysResult" style="margin-top: 20px; font-size: 18px; text-align: center"></div>
+                    </div>
+
+                    <div class="form-section" style="margin-top: 30px">
+                        <label>Thêm/Trừ ngày</label>
+                        <input type="date" id="baseDate" class="time-select" />
+
+                        <div style="display: flex; gap: 10px; margin: 15px 0">
+                            <input type="number" id="daysToAdd" class="time-select" placeholder="Số ngày"
+                                style="flex: 1" />
+                            <select id="addOrSubtract" class="time-select" style="flex: 1">
+                                <option value="add">Thêm</option>
+                                <option value="subtract">Trừ</option>
+                            </select>
+                        </div>
+
+                        <button class="button" id="addDaysBtn">
+                            <i class="fas fa-plus-minus"></i> Tính toán
+                        </button>
+
+                        <div id="addDaysResult" style="margin-top: 20px; font-size: 18px; text-align: center"></div>
+                    </div>
+                </div>
+
+                <!-- Máy tính thời gian -->
+                <div class="feature-container" id="time-calculator-feature">
+                    <div class="title">Máy tính thời gian</div>
+                    <div class="form-section">
+                        <label>Thời gian thứ nhất</label>
+                        <div style="display: flex; gap: 10px">
+                            <input type="number" id="hours1" class="time-select" min="0" placeholder="Giờ"
+                                style="flex: 1" />
+                            <input type="number" id="minutes1" class="time-select" min="0" max="59" placeholder="Phút"
+                                style="flex: 1" />
+                            <input type="number" id="seconds1" class="time-select" min="0" max="59" placeholder="Giây"
+                                style="flex: 1" />
+                        </div>
+
+                        <label>Thời gian thứ hai</label>
+                        <div style="display: flex; gap: 10px">
+                            <input type="number" id="hours2" class="time-select" min="0" placeholder="Giờ"
+                                style="flex: 1" />
+                            <input type="number" id="minutes2" class="time-select" min="0" max="59" placeholder="Phút"
+                                style="flex: 1" />
+                            <input type="number" id="seconds2" class="time-select" min="0" max="59" placeholder="Giây"
+                                style="flex: 1" />
+                        </div>
+
+                        <div style="display: flex; gap: 10px; margin-top: 20px">
+                            <button class="button" id="addTimeBtn" style="flex: 1">
+                                <i class="fas fa-plus"></i> Cộng
+                            </button>
+                            <button class="button" id="subtractTimeBtn" style="flex: 1">
+                                <i class="fas fa-minus"></i> Trừ
+                            </button>
+                        </div>
+
+                        <div id="timeResult" style="margin-top: 20px; font-size: 24px; text-align: center"></div>
+                    </div>
+                </div>
+
+                <!-- Bấm giờ Pomodoro -->
+                <div class="feature-container" id="pomodoro-feature">
+                    <div class="title">Bấm giờ Pomodoro</div>
+                    <div class="timer-display" id="pomodoroDisplay">25:00</div>
+                    <div style="margin: 20px 0; text-align: center">
+                        <span id="pomodoroStatus">Sẵn sàng làm việc</span>
+                    </div>
+                    <div class="timer-controls">
+                        <button class="stopwatch-button start-button" id="startPomodoro">
+                            <i class="fas fa-play"></i> Bắt đầu
+                        </button>
+                        <button class="stopwatch-button pause-button" id="pausePomodoro" disabled>
+                            <i class="fas fa-pause"></i> Tạm dừng
+                        </button>
+                        <button class="stopwatch-button reset-button" id="resetPomodoro" disabled>
+                            <i class="fas fa-undo"></i> Đặt lại
+                        </button>
+                    </div>
+                    <div style="margin-top: 20px">
+                        <label>Chế độ:</label>
+                        <div style="display: flex; gap: 10px; margin-top: 10px">
+                            <button class="button" id="workModeBtn" style="flex: 1; background-color: #27ae60">
+                                <i class="fas fa-briefcase"></i> Làm việc (25p)
+                            </button>
+                            <button class="button" id="shortBreakBtn" style="flex: 1; background-color: #3498db">
+                                <i class="fas fa-coffee"></i> Nghỉ ngắn (5p)
+                            </button>
+                            <button class="button" id="longBreakBtn" style="flex: 1; background-color: #9b59b6">
+                                <i class="fas fa-bed"></i> Nghỉ dài (15p)
+                            </button>
+                        </div>
+                    </div>
+                    <div id="pomodoroHistory" style="margin-top: 20px; max-height: 200px; overflow-y: auto">
+                        <h3>Lịch sử</h3>
+                        <div id="pomodoroHistoryList"></div>
+                    </div>
+                </div>
+
+                <!-- Lịch -->
+                <div class="feature-container" id="calendar-feature">
+                    <div class="title">Lịch 2025</div>
+                    <div class="calendar-header">
+                        <div class="calendar-nav">
+                            <button class="calendar-nav-btn" id="prevMonth">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                        </div>
+                        <div class="calendar-title" id="calendarTitle">Tháng 3, 2025</div>
+                        <div class="calendar-nav">
+                            <button class="calendar-nav-btn" id="nextMonth">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="calendar-weekdays">
+                        <div>CN</div>
+                        <div>T2</div>
+                        <div>T3</div>
+                        <div>T4</div>
+                        <div>T5</div>
+                        <div>T6</div>
+                        <div>T7</div>
+                    </div>
+                    <div class="calendar-days" id="calendarDays">
+                        <!-- Ngày trong tháng sẽ được thêm vào đây -->
+                    </div>
+                </div>
+
+                <div class="footer">
+                    <p>© 2025 Đồng hồ Online</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Trang đếm ngược với vòng tròn lớn hơn -->
+    <div class="countdown-page" id="countdownPage">
+        <button class="back-button" id="backToMainBtn">
+            <i class="fas fa-arrow-left"></i> Quay lại
+        </button>
+
+        <h1 class="countdown-page-title">Đang đếm ngược đến báo thức</h1>
+
+        <div class="countdown-container">
+            <div class="countdown-title">Báo thức</div>
+            <div class="countdown-circle">
+                <svg>
+                    <!-- Gradient cho vòng tròn tiến trình -->
+                    <defs>
+                        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" stop-color="#4a69bd" />
+                            <stop offset="100%" stop-color="#0c2461" />
+                        </linearGradient>
+                    </defs>
+                    <circle class="background-circle" cx="200" cy="200" r="180"></circle>
+                    <circle class="progress-circle" id="progressCircle" cx="200" cy="200" r="180"></circle>
+                </svg>
+                <div class="countdown-time" id="countdownTime">00:00:00</div>
+            </div>
+            <div class="countdown-alarm-time" id="alarmTimeDisplay">
+                <i class="fas fa-bell"></i> <span></span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-bar-fill" id="progressBarFill"></div>
+            </div>
+            <div class="progress-bar-text" id="progressBarText">0%</div>
+            <button class="stop-button" id="stopCountdownBtn">
+                <i class="fas fa-stop"></i> Dừng
+            </button>
+        </div>
+    </div>
+
+    <div class="alarm-notification" id="alarmNotification">
+        <div><strong>Báo thức!</strong> <span id="notificationText"></span></div>
+        <button id="stopAlarmBtn">Tắt báo thức</button>
+    </div>
+
+    <!-- Âm thanh báo thức -->
+    <audio id="alarmAudio" preload="auto">
+        <source src="https://www.soundjay.com/misc/sounds/alarm-clock-01.mp3" type="audio/mpeg" />
+        <source src="https://www.soundjay.com/misc/sounds/alarm-clock-01.wav" type="audio/wav" />
+    </audio>
+
+    <!-- Âm thanh xem trước -->
+    <audio id="previewAudio" preload="auto"></audio>
+
+    <!-- Âm thanh Pomodoro -->
+    <audio id="pomodoroAudio" preload="auto">
+        <source src="https://www.soundjay.com/buttons/sounds/button-09.mp3" type="audio/mpeg" />
+    </audio>
+
+    <script>
+        // Biến lưu trữ các báo thức
+        let alarms = [];
+        let activeAlarm = null;
+        let selectedSound = "fire_alarm"; // Âm thanh mặc định
+        let countdownInterval = null;
+        let totalSeconds = 0;
+        let remainingSeconds = 0;
+        let userInteracted = false; // Theo dõi tương tác người dùng
+
+        // Danh sách đường dẫn âm thanh
+        const soundUrls = {
+            fire_alarm: "../alarm-301729.mp3",
+            siren: "../alarm-siren-sound-effect-type-01-294194.mp3",
+            loud_beep: "../beep-warning-6387.mp3",
+            air_horn:
+                "../civil-defense-siren-128262.mp3",
+            military: "../france-eas-alarm-real-279661.mp3",
+            nuclear: "../texas-eas-alarm-261076.mp3",
+            classic: "../alarm-no3-14864.mp3",
+            police: "../fx-loud-emergency-alarm-236420.mp3",
+        };
+
+        // ===== CHỨC NĂNG CHUNG =====
+
+        // Hàm chuyển đổi tính năng
+        function switchFeature(featureId) {
+            // Ẩn tất cả các tính năng
+            document.querySelectorAll('.feature-container').forEach(container => {
+                container.classList.remove('active');
+            });
+
+            // Hiển thị tính năng được chọn
+            document.getElementById(`${featureId}-feature`).classList.add('active');
+
+            // Cập nhật menu
+            document.querySelectorAll('.sidebar ul li').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            document.querySelector(`.sidebar ul li[data-feature="${featureId}"]`).classList.add('active');
+        }
+
+        // Hàm điều hướng đến trang đếm ngược
+        function navigateToCountdownPage(alarm) {
+            localStorage.setItem("currentAlarm", JSON.stringify(alarm));
+
+            const mainPage = document.getElementById("mainPage");
+            const countdownPage = document.getElementById("countdownPage");
+
+            mainPage.classList.add("slide-out");
+
+            setTimeout(() => {
+                mainPage.classList.add("hidden");
+                countdownPage.classList.add("active");
+
+                startCountdown(alarm);
+            }, 500);
+        }
+
+        // Hàm điều hướng về trang chính
+        function navigateToMainPage() {
+            const mainPage = document.getElementById("mainPage");
+            const countdownPage = document.getElementById("countdownPage");
+
+            countdownPage.classList.remove("active");
+
+            setTimeout(() => {
+                mainPage.classList.remove("hidden");
+
+                setTimeout(() => {
+                    mainPage.classList.remove("slide-out");
+                }, 50);
+            }, 500);
+
+            stopCountdown();
+        }
+
+        // ===== ĐỒNG HỒ BÁO THỨC =====
+
+        // Cập nhật thời gian thực
+        function updateTime() {
+            const now = new Date(); // Thời gian Việt Nam
+            const hours = now.getHours().toString().padStart(2, "0");
+            const minutes = now.getMinutes().toString().padStart(2, "0");
+            const seconds = now.getSeconds().toString().padStart(2, "0");
+            const timeString = `${hours}:${minutes}:${seconds}`;
+
+            // Cập nhật tất cả các đồng hồ
+            document.getElementById("clock").textContent = timeString;
+            document.getElementById("nightClock").textContent = timeString;
+            document.getElementById("dayNightClock").textContent = timeString;
+
+            // Cập nhật ngày
+            const days = [
+                "Chủ nhật",
+                "Thứ hai",
+                "Thứ ba",
+                "Thứ tư",
+                "Thứ năm",
+                "Thứ sáu",
+                "Thứ bảy",
+            ];
+            const day = days[now.getDay()];
+            const date = now.getDate().toString().padStart(2, "0");
+            const month = (now.getMonth() + 1).toString().padStart(2, "0");
+            const year = now.getFullYear();
+            const dateString = `${day}, ${date} tháng ${month} năm ${year}`;
+
+            document.getElementById("date").textContent = dateString;
+            document.getElementById("nightDate").textContent = dateString;
+            document.getElementById("dayNightDate").textContent = dateString;
+
+            // Cập nhật trạng thái ngày/đêm
+            updateDayNightStatus(now);
+
+            // Kiểm tra báo thức
+            checkAlarms(hours, minutes, seconds, date, month, year);
+
+            // Cập nhật đồng hồ thế giới
+            updateWorldClocks(now);
+        }
+
+        // Cập nhật trạng thái ngày/đêm
+        function updateDayNightStatus(now) {
+            const hours = now.getHours();
+            const statusElement = document.getElementById("dayNightStatus");
+
+            if (hours >= 5 && hours < 12) {
+                statusElement.innerHTML = '<i class="fas fa-sun" style="color: #f39c12;"></i> Buổi sáng';
+                document.getElementById("dayNightClock").style.color = "#f39c12";
+            } else if (hours >= 12 && hours < 18) {
+                statusElement.innerHTML = '<i class="fas fa-sun" style="color: #e67e22;"></i> Buổi chiều';
+                document.getElementById("dayNightClock").style.color = "#e67e22";
+            } else if (hours >= 18 && hours < 22) {
+                statusElement.innerHTML = '<i class="fas fa-moon" style="color: #3498db;"></i> Buổi tối';
+                document.getElementById("dayNightClock").style.color = "#3498db";
+            } else {
+                statusElement.innerHTML = '<i class="fas fa-moon" style="color: #2c3e50;"></i> Đêm khuya';
+                document.getElementById("dayNightClock").style.color = "#2c3e50";
+            }
+        }
+
+        // Cập nhật đồng hồ thế giới
+        function updateWorldClocks(now) {
+            const worldClocks = document.getElementById("worldClocks");
+
+            // Chỉ cập nhật nếu đã khởi tạo
+            if (worldClocks.children.length > 0) {
+                const cities = [
+                    { name: "Hà Nội", offset: 7 },
+                    { name: "Tokyo", offset: 9 },
+                    { name: "London", offset: 0 },
+                    { name: "New York", offset: -5 },
+                    { name: "Sydney", offset: 10 },
+                    { name: "Paris", offset: 1 }
+                ];
+
+                cities.forEach((city, index) => {
+                    // Tính toán thời gian dựa trên múi giờ của Việt Nam (UTC+7)
+                    const utcTime = new Date(now.getTime() - 7 * 60 * 60 * 1000); // Chuyển về UTC
+                    const localTime = new Date(utcTime.getTime() + city.offset * 60 * 60 * 1000); // Chuyển sang múi giờ thành phố
+
+                    const hours = localTime.getHours().toString().padStart(2, "0");
+                    const minutes = localTime.getMinutes().toString().padStart(2, "0");
+                    const seconds = localTime.getSeconds().toString().padStart(2, "0");
+                    const timeString = `${hours}:${minutes}:${seconds}`;
+
+                    const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                    const dateString = localTime.toLocaleDateString('vi-VN', dateOptions);
+
+                    const clockItem = worldClocks.children[index];
+                    clockItem.querySelector(".world-clock-time").textContent = timeString;
+                    clockItem.querySelector(".world-clock-date").textContent = dateString;
+                });
+            }
+        }
+
+        // Kiểm tra báo thức
+        function checkAlarms(currentHours, currentMinutes, currentSeconds, currentDay, currentMonth, currentYear) {
+            alarms.forEach((alarm) => {
+                if (
+                    alarm.active &&
+                    parseInt(alarm.hour) === parseInt(currentHours) &&
+                    parseInt(alarm.minute) === parseInt(currentMinutes) &&
+                    parseInt(alarm.day) === parseInt(currentDay) &&
+                    parseInt(alarm.month) === parseInt(currentMonth) &&
+                    parseInt(alarm.year) === parseInt(currentYear) &&
+                    parseInt(currentSeconds) === 0 // Kích hoạt khi giây = 0
+                ) {
+                    triggerAlarm(alarm);
+                }
+            });
+        }
+
+        // Kích hoạt báo thức
+        function triggerAlarm(alarm) {
+            activeAlarm = alarm;
+
+            // Nếu đang ở trang đếm ngược, quay về trang chính
+            if (document.getElementById("countdownPage").classList.contains("active")) {
+                navigateToMainPage();
+            }
+
+            // Hiển thị thông báo
+            const notification = document.getElementById("alarmNotification");
+            document.getElementById("notificationText").textContent = alarm.name || "Đã đến giờ báo thức!";
+            notification.classList.add("show");
+
+            // Phát âm thanh
+            const audio = document.getElementById("alarmAudio");
+
+            try {
+                audio.src = soundUrls[alarm.sound] || soundUrls.classic;
+                audio.volume = 1.0;
+
+                // Bắt đầu phát âm thanh và xử lý lỗi
+                const playPromise = audio.play();
+
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => {
+                        console.error("Lỗi phát âm thanh báo thức:", error);
+                        // Thông báo cho người dùng cần tương tác
+                        alert("Vui lòng nhấp vào trang để cho phép phát âm thanh báo thức!");
+
+                        // Thử phát lại khi người dùng tương tác
+                        document.addEventListener('click', () => {
+                            audio.play().catch(e => console.error("Vẫn không thể phát âm thanh:", e));
+                        }, { once: true });
+                    });
+                }
+            } catch (error) {
+                console.error("Lỗi thiết lập âm thanh báo thức:", error);
+            }
+
+            // Vô hiệu hóa báo thức sau khi kích hoạt
+            alarm.active = false;
+            renderAlarms();
+
+            // Xóa khỏi localStorage
+            localStorage.removeItem("currentAlarm");
+        }
+
+        // Dừng báo thức
+        function stopAlarm() {
+            const notification = document.getElementById("alarmNotification");
+            notification.classList.remove("show");
+
+            const audio = document.getElementById("alarmAudio");
+            audio.pause();
+            audio.currentTime = 0;
+
+            activeAlarm = null;
+        }
+
+        // Xem trước âm thanh
+        function previewSound(soundName) {
+            const previewAudio = document.getElementById("previewAudio");
+
+            // Dừng xem trước hiện tại nếu có
+            previewAudio.pause();
+            previewAudio.currentTime = 0;
+
+            try {
+                previewAudio.src = soundUrls[soundName] || soundUrls.classic;
+                previewAudio.volume = 0.5; // Giảm âm lượng khi xem trước
+
+                const playPromise = previewAudio.play();
+
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => {
+                        console.error("Lỗi phát âm thanh xem trước:", error);
+                        userInteracted = false;
+                    });
+                }
+
+                // Tự động dừng sau 3 giây
+                setTimeout(() => {
+                    previewAudio.pause();
+                    previewAudio.currentTime = 0;
+                }, 3000);
+            } catch (error) {
+                console.error("Lỗi thiết lập âm thanh xem trước:", error);
+            }
+        }
+
+        // Chọn âm thanh
+        function selectSound(soundName) {
+            selectedSound = soundName;
+        }
+
+        // Cập nhật ngày trong select box dựa trên tháng và năm
+        function updateDaySelect(month, year) {
+            const daySelect = document.getElementById("daySelect");
+            const currentValue = daySelect.value;
+            daySelect.innerHTML = "";
+
+            let daysInMonth = new Date(year, month, 0).getDate();
+
+            for (let i = 1; i <= daysInMonth; i++) {
+                const dayOption = document.createElement("option");
+                dayOption.value = i.toString().padStart(2, "0");
+                dayOption.textContent = i.toString().padStart(2, "0");
+                daySelect.appendChild(dayOption);
+            }
+
+            // Giữ lại giá trị đã chọn nếu hợp lệ
+            if (currentValue && parseInt(currentValue) <= daysInMonth) {
+                daySelect.value = currentValue;
+            } else {
+                // Nếu không, chọn ngày hiện tại
+                const today = new Date();
+                if (today.getMonth() + 1 === parseInt(month) && today.getFullYear() === parseInt(year)) {
+                    daySelect.value = today.getDate().toString().padStart(2, "0");
+                } else {
+                    daySelect.value = "01";
+                }
+            }
+        }
+
+        // Khởi tạo select box năm
+        function initYearSelect() {
+            const yearSelect = document.getElementById("yearSelect");
+            yearSelect.innerHTML = ""; // Xóa tất cả options hiện tại
+
+            const currentYear = new Date().getFullYear();
+
+            for (let year = currentYear; year <= currentYear + 5; year++) {
+                const yearOption = document.createElement("option");
+                yearOption.value = year.toString();
+                yearOption.textContent = year.toString();
+                yearSelect.appendChild(yearOption);
+            }
+
+            yearSelect.value = currentYear.toString();
+        }
+
+        // Thêm báo thức
+        function addAlarm() {
+            const hour = document.getElementById("hourSelect").value;
+            const minute = document.getElementById("minuteSelect").value;
+            const day = document.getElementById("daySelect").value;
+            const month = document.getElementById("monthSelect").value;
+            const year = document.getElementById("yearSelect").value;
+            const name = document.getElementById("alarmName").value.trim() || "Báo thức";
+            const sound = document.getElementById("soundSelect").value;
+
+            // Kiểm tra thời gian hợp lệ
+            const now = new Date();
+            const alarmTime = new Date(year, month - 1, day, hour, minute, 0);
+
+            if (alarmTime <= now) {
+                alert("Thời gian báo thức đã qua. Vui lòng chọn thời gian trong tương lai!");
+                return;
+            }
+
+            const alarm = {
+                id: Date.now(),
+                hour: hour,
+                minute: minute,
+                day: day,
+                month: month,
+                year: year,
+                name: name,
+                sound: sound,
+                active: true,
+                targetTime: alarmTime.getTime()
+            };
+
+            alarms.push(alarm);
+
+            // Cập nhật danh sách báo thức
+            renderAlarms();
+
+            // Lưu tất cả báo thức vào localStorage
+            localStorage.setItem("alarms", JSON.stringify(alarms));
+
+            // Chuyển sang trang đếm ngược
+            navigateToCountdownPage(alarm);
+        }
+
+        // Bắt đầu đếm ngược
+        function startCountdown(alarm) {
+            const now = new Date();
+            let alarmTime;
+
+            if (alarm.targetTime) {
+                // Nếu đã có targetTime (từ localStorage)
+                alarmTime = new Date(alarm.targetTime);
+            } else {
+                // Nếu chưa có, tạo mới từ các thành phần
+                alarmTime = new Date(
+                    alarm.year,
+                    alarm.month - 1,
+                    alarm.day,
+                    alarm.hour,
+                    alarm.minute,
+                    0
+                );
+                alarm.targetTime = alarmTime.getTime();
+            }
+
+            // Tính toán thời gian còn lại (tính bằng giây)
+            totalSeconds = Math.floor((alarmTime - now) / 1000);
+            remainingSeconds = totalSeconds;
+
+            if (totalSeconds <= 0) {
+                triggerAlarm(alarm);
+                return;
+            }
+
+            // Lưu báo thức hiện tại
+            activeAlarm = alarm;
+
+            // Hiển thị thời gian báo thức
+            const alarmHour = alarm.hour.toString().padStart(2, "0");
+            const alarmMinute = alarm.minute.toString().padStart(2, "0");
+            document.getElementById("alarmTimeDisplay").querySelector("span").textContent =
+                `${alarmHour}:${alarmMinute} - ${alarm.day}/${alarm.month}/${alarm.year}`;
+
+            // Cập nhật thời gian đếm ngược lần đầu
+            updateCountdown();
+
+            // Bắt đầu đếm ngược
+            countdownInterval = setInterval(() => {
+                remainingSeconds--;
+                updateCountdown();
+
+                if (remainingSeconds <= 0) {
+                    clearInterval(countdownInterval);
+                    triggerAlarm(alarm);
+                }
+            }, 1000);
+        }
+
+        // Cập nhật giao diện đếm ngược
+        function updateCountdown() {
+            const hours = Math.floor(remainingSeconds / 3600);
+            const minutes = Math.floor((remainingSeconds % 3600) / 60);
+            const seconds = remainingSeconds % 60;
+            const timeString = `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+            document.getElementById("countdownTime").textContent = timeString;
+
+            // Cập nhật vòng tròn tiến trình
+            const circumference = 1131; // 2π × 180
+            const progressPercent = (remainingSeconds / totalSeconds) * 100;
+            const dashOffset = circumference * (1 - progressPercent / 100);
+            document.getElementById("progressCircle").style.strokeDashoffset = dashOffset;
+
+            // Cập nhật thanh tiến trình
+            document.getElementById("progressBarFill").style.width = `${progressPercent}%`;
+            document.getElementById("progressBarText").textContent = `${Math.round(progressPercent)}%`;
+        }
+
+        // Dừng đếm ngược
+        function stopCountdown() {
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+                countdownInterval = null;
+            }
+
+            // Đặt lại giao diện đếm ngược
+            document.getElementById("progressBarFill").style.width = "0%";
+            document.getElementById("progressBarText").textContent = "0%";
+            document.getElementById("progressCircle").style.strokeDashoffset = 1131;
+            document.getElementById("countdownTime").textContent = "00:00:00";
+
+            // Xóa báo thức hiện tại khỏi localStorage
+            localStorage.removeItem("currentAlarm");
+        }
+
+        // Xóa báo thức
+        function deleteAlarm(id) {
+            alarms = alarms.filter((alarm) => alarm.id !== id);
+            renderAlarms();
+
+            // Nếu xóa báo thức đang hoạt động
+            if (activeAlarm && activeAlarm.id === id) {
+                stopCountdown();
+                stopAlarm();
+
+                // Nếu đang ở trang đếm ngược, quay về trang chính
+                if (document.getElementById("countdownPage").classList.contains("active")) {
+                    navigateToMainPage();
+                }
+            }
+
+            // Cập nhật localStorage
+            localStorage.setItem("alarms", JSON.stringify(alarms));
+        }
+
+        // Lấy tên âm thanh hiển thị
+        function getSoundDisplayName(soundId) {
+            const soundNames = {
+                fire_alarm: "Báo động cháy",
+                siren: "Còi hú khẩn cấp",
+                loud_beep: "Tiếng bíp cực to",
+                air_horn: "Kèn không khí",
+                military: "Kèn quân đội",
+                nuclear: "Cảnh báo hạt nhân",
+                classic: "Báo thức cổ điển",
+                police: "Còi cảnh sát",
+            };
+            return soundNames[soundId] || "Âm thanh báo thức";
+        }
+
+        // Hiển thị danh sách báo thức
+        function renderAlarms() {
+            const container = document.getElementById("alarmsContainer");
+            container.innerHTML = "";
+
+            if (alarms.length === 0) {
+                container.innerHTML = "<p>Chưa có báo thức nào được đặt.</p>";
+                return;
+            }
+
+            alarms.forEach((alarm) => {
+                const alarmElement = document.createElement("div");
+                alarmElement.className = "alarm-item";
+                alarmElement.innerHTML = `
+            <div>
+              <div class="alarm-time">${alarm.day}/${alarm.month}/${alarm.year} ${alarm.hour}:${alarm.minute}</div>
+              <div class="alarm-name">${alarm.name}</div>
+              <div class="alarm-sound">Âm thanh: ${getSoundDisplayName(
+                    alarm.sound
+                )}</div>
+            </div>
+            <div class="alarm-actions">
+              <button onclick="deleteAlarm(${alarm.id
+                    })"><i class="fas fa-trash-alt"></i></button>
+            </div>
+          `;
+                container.appendChild(alarmElement);
+            });
+        }
+
+        // ===== ĐỒNG HỒ BẤM GIỜ =====
+        let stopwatchInterval;
+        let stopwatchTime = 0;
+        let stopwatchRunning = false;
+        let laps = [];
+
+        function startStopwatch() {
+            if (!stopwatchRunning) {
+                stopwatchRunning = true;
+                const startTime = Date.now() - stopwatchTime;
+                stopwatchInterval = setInterval(() => {
+                    stopwatchTime = Date.now() - startTime;
+                    updateStopwatchDisplay();
+                }, 10);
+
+                document.getElementById("startStopwatch").disabled = true;
+                document.getElementById("pauseStopwatch").disabled = false;
+                document.getElementById("resetStopwatch").disabled = false;
+                document.getElementById("lapStopwatch").disabled = false;
+            }
+        }
+
+        function pauseStopwatch() {
+            if (stopwatchRunning) {
+                stopwatchRunning = false;
+                clearInterval(stopwatchInterval);
+
+                document.getElementById("startStopwatch").disabled = false;
+                document.getElementById("pauseStopwatch").disabled = true;
+            }
+        }
+
+        function resetStopwatch() {
+            pauseStopwatch();
+            stopwatchTime = 0;
+            laps = [];
+            updateStopwatchDisplay();
+            updateLapsDisplay();
+
+            document.getElementById("resetStopwatch").disabled = true;
+            document.getElementById("lapStopwatch").disabled = true;
+        }
+
+        function recordLap() {
+            if (stopwatchRunning) {
+                laps.push(stopwatchTime);
+                updateLapsDisplay();
+            }
+        }
+
+        function updateStopwatchDisplay() {
+            const milliseconds = stopwatchTime % 1000;
+            const seconds = Math.floor((stopwatchTime / 1000) % 60);
+            const minutes = Math.floor((stopwatchTime / (1000 * 60)) % 60);
+            const hours = Math.floor(stopwatchTime / (1000 * 60 * 60));
+
+            const display = `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}.${milliseconds.toString().padStart(3, "0").substring(0, 3)}`;
+            document.getElementById("stopwatchDisplay").textContent = display;
+        }
+
+        function updateLapsDisplay() {
+            const lapsContainer = document.getElementById("lapsContainer");
+            lapsContainer.innerHTML = "";
+
+            laps.forEach((lapTime, index) => {
+                const milliseconds = lapTime % 1000;
+                const seconds = Math.floor((lapTime / 1000) % 60);
+                const minutes = Math.floor((lapTime / (1000 * 60)) % 60);
+                const hours = Math.floor(lapTime / (1000 * 60 * 60));
+
+                const lapDisplay = `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}.${milliseconds.toString().padStart(3, "0").substring(0, 3)}`;
+
+                const lapElement = document.createElement("div");
+                lapElement.className = "lap-item";
+                lapElement.innerHTML = `
+            <span>Vòng ${index + 1}</span>
+            <span>${lapDisplay}</span>
+          `;
+                lapsContainer.appendChild(lapElement);
+            });
+        }
+
+        // ===== ĐỒNG HỒ HẸN GIỜ =====
+        let timerInterval;
+        let timerSeconds = 0;
+        let timerRunning = false;
+
+        function startTimer() {
+            if (!timerRunning) {
+                const hours = parseInt(document.getElementById("hoursInput").value) || 0;
+                const minutes = parseInt(document.getElementById("minutesInput").value) || 0;
+                const seconds = parseInt(document.getElementById("secondsInput").value) || 0;
+
+                timerSeconds = hours * 3600 + minutes * 60 + seconds;
+
+                if (timerSeconds <= 0) {
+                    alert("Vui lòng nhập thời gian lớn hơn 0!");
+                    return;
+                }
+
+                timerRunning = true;
+                updateTimerDisplay();
+
+                timerInterval = setInterval(() => {
+                    timerSeconds--;
+                    updateTimerDisplay();
+
+                    if (timerSeconds <= 0) {
+                        clearInterval(timerInterval);
+                        timerRunning = false;
+                        playTimerEndSound();
+                        alert("Hết giờ!");
+
+                        document.getElementById("startTimer").disabled = false;
+                        document.getElementById("pauseTimer").disabled = true;
+                        document.getElementById("resetTimer").disabled = false;
+                    }
+                }, 1000);
+
+                document.getElementById("startTimer").disabled = true;
+                document.getElementById("pauseTimer").disabled = false;
+                document.getElementById("resetTimer").disabled = false;
+            }
+        }
+
+        function pauseTimer() {
+            if (timerRunning) {
+                timerRunning = false;
+                clearInterval(timerInterval);
+
+                document.getElementById("startTimer").disabled = false;
+                document.getElementById("pauseTimer").disabled = true;
+            }
+        }
+
+        function resetTimer() {
+            pauseTimer();
+            timerSeconds = 0;
+            updateTimerDisplay();
+
+            document.getElementById("hoursInput").value = 0;
+            document.getElementById("minutesInput").value = 5;
+            document.getElementById("secondsInput").value = 0;
+
+            document.getElementById("resetTimer").disabled = true;
+        }
+
+        function updateTimerDisplay() {
+            const hours = Math.floor(timerSeconds / 3600);
+            const minutes = Math.floor((timerSeconds % 3600) / 60);
+            const seconds = timerSeconds % 60;
+
+            const display = `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+            document.getElementById("timerDisplay").textContent = display;
+        }
+
+        function playTimerEndSound() {
+            const audio = document.getElementById("alarmAudio");
+            try {
+                audio.src = soundUrls.classic;
+                audio.play().catch(e => console.error("Không thể phát âm thanh kết thúc hẹn giờ:", e));
+            } catch (error) {
+                console.error("Lỗi phát âm thanh kết thúc hẹn giờ:", error);
+            }
+        }
+
+        // ===== ĐỒNG HỒ THẾ GIỚI =====
+        function initWorldClocks() {
+            const worldClocks = document.getElementById("worldClocks");
+            worldClocks.innerHTML = "";
+
+            const cities = [
+                { name: "Hà Nội", offset: 7 },
+                { name: "Tokyo", offset: 9 },
+                { name: "London", offset: 0 },
+                { name: "New York", offset: -5 },
+                { name: "Sydney", offset: 10 },
+                { name: "Paris", offset: 1 }
+            ];
+
+            cities.forEach(city => {
+                const clockItem = document.createElement("div");
+                clockItem.className = "world-clock-item";
+                clockItem.innerHTML = `
+            <div class="world-clock-city">${city.name} (GMT${city.offset >= 0 ? '+' : ''}${city.offset})</div>
+            <div class="world-clock-time">00:00:00</div>
+            <div class="world-clock-date"></div>
+          `;
+                worldClocks.appendChild(clockItem);
+            });
+
+            // Cập nhật lần đầu
+            const now = new Date();
+            updateWorldClocks(now);
+        }
+
+        // ===== TÍNH NGÀY =====
+        function calculateDays() {
+            const startDate = new Date(document.getElementById("startDate").value);
+            const endDate = new Date(document.getElementById("endDate").value);
+
+            if (isNaN(startDate.getTime()) || isNaN(endDate.getTime())) {
+                alert("Vui lòng chọn ngày hợp lệ!");
+                return;
+            }
+
+            // Tính số mili giây giữa hai ngày
+            const diffTime = Math.abs(endDate - startDate);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            document.getElementById("daysResult").innerHTML = `
+          <strong>Kết quả:</strong><br>
+          Từ ${startDate.toLocaleDateString('vi-VN')} đến ${endDate.toLocaleDateString('vi-VN')}<br>
+          <span style="font-size: 24px; color: var(--secondary-color);">${diffDays} ngày</span>
+        `;
+        }
+
+        function addDaysToDate() {
+            const baseDate = new Date(document.getElementById("baseDate").value);
+            const daysToAdd = parseInt(document.getElementById("daysToAdd").value);
+            const operation = document.getElementById("addOrSubtract").value;
+
+            if (isNaN(baseDate.getTime()) || isNaN(daysToAdd)) {
+                alert("Vui lòng nhập thông tin hợp lệ!");
+                return;
+            }
+
+            const resultDate = new Date(baseDate);
+            if (operation === "add") {
+                resultDate.setDate(resultDate.getDate() + daysToAdd);
+            } else {
+                resultDate.setDate(resultDate.getDate() - daysToAdd);
+            }
+
+            document.getElementById("addDaysResult").innerHTML = `
+          <strong>Kết quả:</strong><br>
+          ${operation === "add" ? "Cộng" : "Trừ"} ${daysToAdd} ngày ${operation === "add" ? "vào" : "từ"} ${baseDate.toLocaleDateString('vi-VN')}<br>
+          <span style="font-size: 24px; color: var(--secondary-color);">${resultDate.toLocaleDateString('vi-VN')}</span>
+        `;
+        }
+
+        // ===== MÁY TÍNH THỜI GIAN =====
+        function calculateTime(operation) {
+            const hours1 = parseInt(document.getElementById("hours1").value) || 0;
+            const minutes1 = parseInt(document.getElementById("minutes1").value) || 0;
+            const seconds1 = parseInt(document.getElementById("seconds1").value) || 0;
+
+            const hours2 = parseInt(document.getElementById("hours2").value) || 0;
+            const minutes2 = parseInt(document.getElementById("minutes2").value) || 0;
+            const seconds2 = parseInt(document.getElementById("seconds2").value) || 0;
+
+            // Chuyển đổi tất cả thành giây
+            const totalSeconds1 = hours1 * 3600 + minutes1 * 60 + seconds1;
+            const totalSeconds2 = hours2 * 3600 + minutes2 * 60 + seconds2;
+
+            let resultSeconds;
+
+            if (operation === "add") {
+                resultSeconds = totalSeconds1 + totalSeconds2;
+            } else {
+                resultSeconds = totalSeconds1 - totalSeconds2;
+                if (resultSeconds < 0) {
+                    resultSeconds = Math.abs(resultSeconds);
+                    document.getElementById("timeResult").innerHTML = `
+              <span style="color: var(--accent-color);">Kết quả là giá trị âm, đã được chuyển thành dương</span><br>
+            `;
+                } else {
+                    document.getElementById("timeResult").innerHTML = "";
+                }
+            }
+
+            // Chuyển đổi kết quả trở lại định dạng giờ:phút:giây
+            const resultHours = Math.floor(resultSeconds / 3600);
+            const resultMinutes = Math.floor((resultSeconds % 3600) / 60);
+            const resultRemainingSeconds = resultSeconds % 60;
+
+            document.getElementById("timeResult").innerHTML += `
+          <span style="font-size: 32px; color: var(--secondary-color);">
+            ${resultHours.toString().padStart(2, "0")}:${resultMinutes.toString().padStart(2, "0")}:${resultRemainingSeconds.toString().padStart(2, "0")}
+          </span>
+        `;
+        }
+
+        // ===== BẤM GIỜ POMODORO =====
+        let pomodoroInterval;
+        let pomodoroSeconds = 25 * 60; // 25 phút mặc định
+        let pomodoroRunning = false;
+        let pomodoroMode = "work"; // work, shortBreak, longBreak
+        let pomodoroHistory = [];
+
+        function startPomodoro() {
+            if (!pomodoroRunning) {
+                pomodoroRunning = true;
+
+                pomodoroInterval = setInterval(() => {
+                    pomodoroSeconds--;
+                    updatePomodoroDisplay();
+
+                    if (pomodoroSeconds <= 0) {
+                        clearInterval(pomodoroInterval);
+                        pomodoroRunning = false;
+                        playPomodoroEndSound();
+
+                        // Lưu lịch sử
+                        const historyItem = {
+                            mode: pomodoroMode,
+                            timestamp: new Date().toLocaleTimeString()
+                        };
+                        pomodoroHistory.unshift(historyItem); // Thêm vào đầu mảng
+                        updatePomodoroHistory();
+
+                        // Thông báo
+                        if (pomodoroMode === "work") {
+                            alert("Đã hoàn thành thời gian làm việc! Hãy nghỉ ngơi.");
+                            document.getElementById("pomodoroStatus").textContent = "Đã hoàn thành làm việc";
+                        } else {
+                            alert("Đã hết thời gian nghỉ! Hãy quay lại làm việc.");
+                            document.getElementById("pomodoroStatus").textContent = "Đã hoàn thành nghỉ ngơi";
+                        }
+
+                        document.getElementById("startPomodoro").disabled = false;
+                        document.getElementById("pausePomodoro").disabled = true;
+                        document.getElementById("resetPomodoro").disabled = false;
+                    }
+                }, 1000);
+
+                document.getElementById("startPomodoro").disabled = true;
+                document.getElementById("pausePomodoro").disabled = false;
+                document.getElementById("resetPomodoro").disabled = false;
+
+                if (pomodoroMode === "work") {
+                    document.getElementById("pomodoroStatus").textContent = "Đang làm việc...";
+                } else if (pomodoroMode === "shortBreak") {
+                    document.getElementById("pomodoroStatus").textContent = "Đang nghỉ ngắn...";
+                } else {
+                    document.getElementById("pomodoroStatus").textContent = "Đang nghỉ dài...";
+                }
+            }
+        }
+
+        function pausePomodoro() {
+            if (pomodoroRunning) {
+                pomodoroRunning = false;
+                clearInterval(pomodoroInterval);
+
+                document.getElementById("startPomodoro").disabled = false;
+                document.getElementById("pausePomodoro").disabled = true;
+                document.getElementById("pomodoroStatus").textContent += " (tạm dừng)";
+            }
+        }
+
+        function resetPomodoro() {
+            pausePomodoro();
+
+            if (pomodoroMode === "work") {
+                pomodoroSeconds = 25 * 60;
+            } else if (pomodoroMode === "shortBreak") {
+                pomodoroSeconds = 5 * 60;
+            } else {
+                pomodoroSeconds = 15 * 60;
+            }
+
+            updatePomodoroDisplay();
+            document.getElementById("resetPomodoro").disabled = true;
+            document.getElementById("pomodoroStatus").textContent = "Sẵn sàng";
+        }
+
+        function setPomodoroMode(mode) {
+            // Dừng pomodoro hiện tại nếu đang chạy
+            if (pomodoroRunning) {
+                pausePomodoro();
+            }
+
+            pomodoroMode = mode;
+
+            if (mode === "work") {
+                pomodoroSeconds = 25 * 60; // 25 phút
+                document.getElementById("pomodoroStatus").textContent = "Sẵn sàng làm việc";
+            } else if (mode === "shortBreak") {
+                pomodoroSeconds = 5 * 60; // 5 phút
+                document.getElementById("pomodoroStatus").textContent = "Sẵn sàng nghỉ ngắn";
+            } else {
+                pomodoroSeconds = 15 * 60; // 15 phút
+                document.getElementById("pomodoroStatus").textContent = "Sẵn sàng nghỉ dài";
+            }
+
+            updatePomodoroDisplay();
+            document.getElementById("resetPomodoro").disabled = true;
+        }
+
+        function updatePomodoroDisplay() {
+            const minutes = Math.floor(pomodoroSeconds / 60);
+            const seconds = pomodoroSeconds % 60;
+
+            const display = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+            document.getElementById("pomodoroDisplay").textContent = display;
+        }
+
+        function updatePomodoroHistory() {
+            const historyList = document.getElementById("pomodoroHistoryList");
+            historyList.innerHTML = "";
+
+            // Giới hạn chỉ hiển thị 10 mục gần nhất
+            const recentHistory = pomodoroHistory.slice(0, 10);
+
+            recentHistory.forEach(item => {
+                const historyElement = document.createElement("div");
+                historyElement.className = "lap-item";
+
+                let modeText = "";
+                let modeIcon = "";
+
+                if (item.mode === "work") {
+                    modeText = "Làm việc";
+                    modeIcon = '<i class="fas fa-briefcase" style="color: #27ae60;"></i>';
+                } else if (item.mode === "shortBreak") {
+                    modeText = "Nghỉ ngắn";
+                    modeIcon = '<i class="fas fa-coffee" style="color: #3498db;"></i>';
+                } else {
+                    modeText = "Nghỉ dài";
+                    modeIcon = '<i class="fas fa-bed" style="color: #9b59b6;"></i>';
+                }
+
+                historyElement.innerHTML = `
+            <span>${modeIcon} ${modeText}</span>
+            <span>${item.timestamp}</span>
+          `;
+                historyList.appendChild(historyElement);
+            });
+        }
+
+        function playPomodoroEndSound() {
+            const audio = document.getElementById("pomodoroAudio");
+            try {
+                audio.play().catch(e => console.error("Không thể phát âm thanh kết thúc Pomodoro:", e));
+            } catch (error) {
+                console.error("Lỗi phát âm thanh kết thúc Pomodoro:", error);
+            }
+        }
+
+        // ===== LỊCH =====
+        let currentCalendarDate = new Date();
+
+        function initCalendar() {
+            updateCalendarTitle();
+            renderCalendarDays();
+
+            document.getElementById("prevMonth").addEventListener("click", () => {
+                currentCalendarDate.setMonth(currentCalendarDate.getMonth() - 1);
+                updateCalendarTitle();
+                renderCalendarDays();
+            });
+
+            document.getElementById("nextMonth").addEventListener("click", () => {
+                currentCalendarDate.setMonth(currentCalendarDate.getMonth() + 1);
+                updateCalendarTitle();
+                renderCalendarDays();
+            });
+        }
+
+        function updateCalendarTitle() {
+            const monthNames = [
+                "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
+                "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"
+            ];
+
+            const month = currentCalendarDate.getMonth();
+            const year = currentCalendarDate.getFullYear();
+
+            document.getElementById("calendarTitle").textContent = `${monthNames[month]}, ${year}`;
+        }
+
+        function renderCalendarDays() {
+            const calendarDays = document.getElementById("calendarDays");
+            calendarDays.innerHTML = "";
+
+            const year = currentCalendarDate.getFullYear();
+            const month = currentCalendarDate.getMonth();
+
+            // Ngày đầu tiên của tháng
+            const firstDay = new Date(year, month, 1);
+            // Ngày cuối cùng của tháng
+            const lastDay = new Date(year, month + 1, 0);
+
+            // Lấy thứ của ngày đầu tiên (0 = Chủ Nhật, 6 = Thứ Bảy)
+            const firstDayIndex = firstDay.getDay();
+
+            // Số ngày trong tháng
+            const daysInMonth = lastDay.getDate();
+
+            // Số ngày của tháng trước
+            const prevMonthLastDay = new Date(year, month, 0).getDate();
+
+            // Ngày hiện tại
+            const today = new Date();
+
+            // Tạo các ngày của tháng trước
+            for (let i = firstDayIndex; i > 0; i--) {
+                const day = document.createElement("div");
+                day.className = "calendar-day other-month";
+                day.textContent = prevMonthLastDay - i + 1;
+                calendarDays.appendChild(day);
+            }
+
+            // Tạo các ngày của tháng hiện tại
+            for (let i = 1; i <= daysInMonth; i++) {
+                const day = document.createElement("div");
+                day.className = "calendar-day";
+                day.textContent = i;
+
+                // Đánh dấu ngày hiện tại
+                if (i === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+                    day.classList.add("today");
+                }
+
+                calendarDays.appendChild(day);
+            }
+
+            // Tính số ô cần thêm để điền đủ lưới
+            const nextDays = 42 - (firstDayIndex + daysInMonth);
+
+            // Tạo các ngày của tháng tiếp theo
+            for (let i = 1; i <= nextDays; i++) {
+                const day = document.createElement("div");
+                day.className = "calendar-day other-month";
+                day.textContent = i;
+                calendarDays.appendChild(day);
+            }
+        }
+
+        // Khởi tạo
+        function init() {
+            // Cập nhật thời gian mỗi giây
+            setInterval(updateTime, 1000);
+            updateTime(); // Cập nhật ngay lập tức
+
+            // Khởi tạo select box năm
+            initYearSelect();
+
+            // Thiết lập ngày, tháng hiện tại
+            const now = new Date();
+            document.getElementById("monthSelect").value = (now.getMonth() + 1).toString().padStart(2, "0");
+
+            // Cập nhật ngày dựa trên tháng và năm
+            updateDaySelect(
+                document.getElementById("monthSelect").value,
+                document.getElementById("yearSelect").value
+            );
+
+            // Thiết lập giá trị ngày hiện tại
+            document.getElementById("daySelect").value = now.getDate().toString().padStart(2, "0");
+
+            // Thiết lập giờ, phút tiếp theo
+            const nextHour = now.getHours();
+            const nextMinute = now.getMinutes() + 1;
+            document.getElementById("hourSelect").value = nextHour.toString().padStart(2, "0");
+            document.getElementById("minuteSelect").value = nextMinute.toString().padStart(2, "0");
+
+            // Chọn âm thanh mặc định
+            selectSound("fire_alarm");
+            document.getElementById("soundSelect").value = "fire_alarm";
+
+            // Gắn sự kiện thay đổi tháng và năm
+            document.getElementById("monthSelect").addEventListener("change", function () {
+                updateDaySelect(this.value, document.getElementById("yearSelect").value);
+            });
+
+            document.getElementById("yearSelect").addEventListener("change", function () {
+                updateDaySelect(document.getElementById("monthSelect").value, this.value);
+            });
+
+            // Đặt báo thức
+            document.getElementById("setAlarmBtn").addEventListener("click", addAlarm);
+
+            // Thêm event listener cho nút quay lại
+            document.getElementById("backToMainBtn").addEventListener("click", navigateToMainPage);
+
+            // Dừng đếm ngược
+            document.getElementById("stopCountdownBtn").addEventListener("click", () => {
+                if (activeAlarm) {
+                    deleteAlarm(activeAlarm.id);
+                }
+                navigateToMainPage();
+            });
+
+            // Tắt báo thức
+            document.getElementById("stopAlarmBtn").addEventListener("click", stopAlarm);
+
+            // Toggle sidebar trên mobile
+            document.getElementById("menuToggle").addEventListener("click", function () {
+                document.getElementById("sidebar").classList.toggle("active");
+            });
+
+            // Thêm sự kiện chọn âm thanh
+            document.getElementById("soundSelect").addEventListener("change", function () {
+                selectSound(this.value);
+                previewSound(this.value); // Xem trước âm thanh khi chọn
+            });
+
+            // Khởi tạo sự kiện cho menu
+            document.querySelectorAll('.sidebar ul li').forEach(item => {
+                item.addEventListener('click', function () {
+                    const featureId = this.getAttribute('data-feature');
+                    if (featureId) {
+                        switchFeature(featureId);
+                    }
+                });
+            });
+
+            // Khởi tạo chức năng đồng hồ bấm giờ
+            document.getElementById("startStopwatch").addEventListener("click", startStopwatch);
+            document.getElementById("pauseStopwatch").addEventListener("click", pauseStopwatch);
+            document.getElementById("resetStopwatch").addEventListener("click", resetStopwatch);
+            document.getElementById("lapStopwatch").addEventListener("click", recordLap);
+
+            // Khởi tạo chức năng đồng hồ hẹn giờ
+            document.getElementById("startTimer").addEventListener("click", startTimer);
+            document.getElementById("pauseTimer").addEventListener("click", pauseTimer);
+            document.getElementById("resetTimer").addEventListener("click", resetTimer);
+            // Khởi tạo đồng hồ thế giới
+            initWorldClocks();
+
+            // Khởi tạo chức năng tính ngày
+            document.getElementById("calculateDaysBtn").addEventListener("click", calculateDays);
+            document.getElementById("addDaysBtn").addEventListener("click", addDaysToDate);
+
+            // Thiết lập giá trị mặc định cho các trường ngày
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById("startDate").value = today;
+            document.getElementById("endDate").value = today;
+            document.getElementById("baseDate").value = today;
+
+            // Khởi tạo chức năng máy tính thời gian
+            document.getElementById("addTimeBtn").addEventListener("click", () => calculateTime("add"));
+            document.getElementById("subtractTimeBtn").addEventListener("click", () => calculateTime("subtract"));
+
+            // Khởi tạo chức năng Pomodoro
+            document.getElementById("startPomodoro").addEventListener("click", startPomodoro);
+            document.getElementById("pausePomodoro").addEventListener("click", pausePomodoro);
+            document.getElementById("resetPomodoro").addEventListener("click", resetPomodoro);
+            document.getElementById("workModeBtn").addEventListener("click", () => setPomodoroMode("work"));
+            document.getElementById("shortBreakBtn").addEventListener("click", () => setPomodoroMode("shortBreak"));
+            document.getElementById("longBreakBtn").addEventListener("click", () => setPomodoroMode("longBreak"));
+
+            // Thiết lập ban đầu cho Pomodoro
+            updatePomodoroDisplay();
+
+            // Khởi tạo lịch
+            initCalendar();
+
+            // Kiểm tra nếu có báo thức trong localStorage
+            const storedAlarms = localStorage.getItem("alarms");
+            if (storedAlarms) {
+                alarms = JSON.parse(storedAlarms);
+                renderAlarms();
+            }
+
+            // Kiểm tra nếu có báo thức đang chạy trong localStorage
+            const currentAlarm = localStorage.getItem("currentAlarm");
+            if (currentAlarm) {
+                const alarm = JSON.parse(currentAlarm);
+
+                // Kiểm tra xem báo thức có còn hợp lệ không
+                const now = new Date();
+                const alarmTime = new Date(alarm.targetTime);
+
+                if (alarmTime > now) {
+                    // Nếu còn hợp lệ, hiển thị trang đếm ngược
+                    document.getElementById("mainPage").classList.add("slide-out");
+                    document.getElementById("mainPage").classList.add("hidden");
+                    document.getElementById("countdownPage").classList.add("active");
+
+                    // Khởi tạo đếm ngược
+                    startCountdown(alarm);
+                } else {
+                    // Nếu đã hết hạn, xóa khỏi localStorage
+                    localStorage.removeItem("currentAlarm");
+                }
+            }
+
+            // Đặt cờ userInteracted khi có tương tác
+            document.addEventListener("click", () => {
+                userInteracted = true;
+            }, { once: true });
+        }
+
+        // Chạy khởi tạo khi trang đã tải xong
+        document.addEventListener("DOMContentLoaded", init);
+    </script>
+</body>
+
+</html>
