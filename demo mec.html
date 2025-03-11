@@ -1,0 +1,2165 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mercedes-Benz - PTIT</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <style>
+      /* Reset & Base Styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body,
+      html {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        scroll-behavior: smooth;
+      }
+
+      /* Dark Theme */
+      .dark-theme {
+        background-color: #000;
+        color: #fff;
+      }
+
+      /* Header Styles */
+      .main-header {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 100;
+        padding: 20px 0;
+        background-color: rgba(0, 0, 0, 0.7);
+      }
+
+      .header-content {
+        max-width: 1400px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 20px;
+      }
+
+      .main-nav {
+        flex: 1;
+      }
+
+      .nav-links {
+        display: flex;
+        list-style: none;
+      }
+
+      .nav-links li {
+        margin-right: 25px;
+      }
+
+      .nav-links a {
+        color: #fff;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 400;
+        transition: opacity 0.3s;
+      }
+
+      .nav-links a:hover {
+        opacity: 0.7;
+      }
+
+      .logo {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .logo img {
+        width: 40px;
+        height: 40px;
+      }
+
+      .nav-right {
+        display: flex;
+        align-items: center;
+      }
+
+      .provider-link a {
+        color: #fff;
+        text-decoration: none;
+        font-size: 14px;
+        margin-right: 20px;
+      }
+
+      .search-icon button,
+      .language-switcher button {
+        background: none;
+        border: none;
+        color: #fff;
+        font-size: 16px;
+        cursor: pointer;
+        padding: 5px;
+        margin-left: 15px;
+      }
+
+      /* Hero Section */
+      .hero {
+        position: relative;
+        height: 100vh;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 2;
+        padding: 0 50px;
+        max-width: 1400px;
+        margin: 0 auto;
+        width: 100%;
+      }
+
+      .hero-text {
+        max-width: 500px;
+      }
+
+      .hero-text h1 {
+        font-size: 48px;
+        font-weight: 300;
+        line-height: 1.2;
+        margin-bottom: 30px;
+      }
+
+      .btn-primary {
+        display: inline-block;
+        background-color: #0078d6;
+        color: #fff;
+        text-decoration: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        transition: background-color 0.3s;
+      }
+
+      .btn-primary:hover {
+        background-color: #0056b3;
+      }
+
+      .hero-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+      }
+
+      .hero-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          to right,
+          rgba(0, 0, 0, 0.7) 0%,
+          rgba(0, 0, 0, 0.3) 50%,
+          rgba(0, 0, 0, 0) 100%
+        );
+        z-index: 1;
+      }
+
+      .video-play-button {
+        position: absolute;
+        bottom: 30px;
+        left: 50px;
+        z-index: 2;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.2);
+        border: none;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .video-play-button:hover {
+        background-color: rgba(255, 255, 255, 0.3);
+      }
+
+      /* Brand Tabs - Sticky on scroll */
+      .brand-tabs {
+        display: flex;
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+        border: 1px solid #333;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        z-index: 100;
+      }
+
+      .brand-tabs.fixed {
+        position: fixed;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .tab {
+        flex: 1;
+        text-align: center;
+        padding: 15px 0;
+        border-right: 1px solid #333;
+      }
+
+      .tab:last-child {
+        border-right: none;
+      }
+
+      .tab a {
+        color: #fff;
+        text-decoration: none;
+        font-size: 16px;
+        display: block;
+        font-weight: 500;
+      }
+
+      .tab.active {
+        background-color: #000;
+      }
+
+      .tab.amg-tab {
+        background-color: #fff;
+        padding: 8px 0;
+      }
+
+      .tab.amg-tab img {
+        height: 30px;
+        max-width: 100%;
+      }
+
+      .tab.maybach-tab {
+        background-color: #fff;
+      }
+
+      .tab.maybach-tab a {
+        color: #000;
+        letter-spacing: 1px;
+      }
+
+      /* Spacer để tránh nội dung bị nhảy khi tabs được fixed */
+      .brand-tabs-spacer {
+        display: none;
+        height: 52px; /* Chiều cao tương ứng với tabs */
+      }
+
+      .brand-tabs-spacer.active {
+        display: block;
+      }
+
+      /* Media query cho thiết bị di động */
+      @media (max-width: 768px) {
+        .brand-tabs {
+          max-width: 100%;
+          border-left: none;
+          border-right: none;
+        }
+
+        .brand-tabs.fixed {
+          width: 100%;
+        }
+      }
+
+      /* Content Styles */
+      .content {
+        padding: 60px 20px;
+        text-align: center;
+        max-width: 1400px;
+        margin: 0 auto;
+      }
+
+      .content section {
+        margin-bottom: 80px;
+      }
+
+      .content h2 {
+        position: relative;
+        display: inline-block;
+        margin-bottom: 30px;
+        padding-bottom: 10px;
+        font-size: 32px;
+        font-weight: 300;
+      }
+
+      .content h2::after {
+        content: "";
+        position: absolute;
+        width: 50%;
+        height: 2px;
+        bottom: 0;
+        left: 25%;
+        background-color: #333;
+      }
+
+      /* Models Grid */
+      .models-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 30px;
+        margin-top: 40px;
+      }
+
+      .model-card {
+        border: 1px solid #eee;
+        border-radius: 0;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        background-color: #fff;
+      }
+
+      .model-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .model-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+      }
+
+      .model-info {
+        padding: 20px;
+        text-align: left;
+      }
+
+      .model-info h3 {
+        margin-top: 0;
+        font-weight: 500;
+        font-size: 22px;
+      }
+
+      .model-info p {
+        color: #666;
+        margin: 10px 0;
+        font-size: 14px;
+      }
+
+      .model-price {
+        font-weight: bold;
+        color: #000;
+        font-size: 16px;
+        margin: 15px 0;
+      }
+
+      .price-range {
+        font-size: 14px;
+        color: #555;
+        margin-bottom: 20px;
+      }
+
+      .btn-explore {
+        display: inline-block;
+        background-color: #000;
+        color: white;
+        padding: 10px 20px;
+        text-decoration: none;
+        font-size: 14px;
+        transition: background-color 0.3s;
+        border: none;
+        cursor: pointer;
+      }
+
+      .btn-explore:hover {
+        background-color: #333;
+      }
+
+      /* Price Filter */
+      .price-filter {
+        margin: 40px 0;
+        text-align: center;
+      }
+
+      .price-filter h3 {
+        margin-bottom: 20px;
+        font-weight: 400;
+        font-size: 20px;
+      }
+
+      .filter-options {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 30px;
+      }
+
+      .filter-btn {
+        background-color: #f5f5f5;
+        border: 1px solid #ddd;
+        padding: 8px 20px;
+        border-radius: 0;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 14px;
+      }
+
+      .filter-btn:hover,
+      .filter-btn.active {
+        background-color: #000;
+        color: white;
+        border-color: #000;
+      }
+
+      /* Finance Calculator */
+      .finance-calculator {
+        background-color: #f9f9f9;
+        padding: 40px;
+        margin-top: 40px;
+        max-width: 1000px;
+        margin-left: auto;
+        margin-right: auto;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      }
+
+      .finance-calculator h3 {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #333;
+        font-weight: 400;
+        position: relative;
+        padding-bottom: 15px;
+        font-size: 24px;
+      }
+
+      .finance-calculator h3:after {
+        content: "";
+        position: absolute;
+        width: 60px;
+        height: 2px;
+        background-color: #000;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      .calculator-form {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 25px;
+        margin-bottom: 30px;
+      }
+
+      .calculator-group {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .calculator-group label {
+        font-weight: bold;
+        color: #333;
+        font-size: 14px;
+      }
+
+      .calculator-group input,
+      .calculator-group select {
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        font-size: 16px;
+        transition: border-color 0.3s, box-shadow 0.3s;
+      }
+
+      .calculator-group input:focus,
+      .calculator-group select:focus {
+        border-color: #999;
+        box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
+        outline: none;
+      }
+
+      .calculate-btn {
+        grid-column: 1 / -1;
+        background-color: #000;
+        color: white;
+        border: none;
+        padding: 15px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        font-size: 16px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .calculate-btn:hover {
+        background-color: #333;
+      }
+
+      .calculator-result-wrapper {
+        margin-top: 30px;
+        border-top: 1px solid #eee;
+        padding-top: 30px;
+      }
+
+      .calculator-result {
+        background-color: #fff;
+        padding: 0;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+
+      .result-header {
+        background-color: #000;
+        color: white;
+        padding: 15px 20px;
+      }
+
+      .result-header h4 {
+        margin: 0;
+        font-size: 18px;
+        text-align: center;
+        font-weight: 400;
+      }
+
+      .result-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 15px 20px;
+        border-bottom: 1px solid #eee;
+      }
+
+      .result-item:last-child {
+        border-bottom: none;
+      }
+
+      .result-item.highlight {
+        background-color: #f5f5f5;
+      }
+
+      .result-label {
+        font-weight: 500;
+        color: #555;
+      }
+
+      .result-value {
+        font-weight: 600;
+        color: #333;
+      }
+
+      .monthly-payment {
+        font-size: 1.2em;
+        color: #000;
+        font-weight: 700;
+      }
+
+      .calculator-note {
+        margin-top: 20px;
+        padding: 15px;
+        background-color: #f0f0f0;
+        font-size: 14px;
+        color: #666;
+      }
+
+      .calculator-note p {
+        margin: 5px 0;
+      }
+
+      /* About Section */
+      .about-content {
+        display: flex;
+        align-items: center;
+        gap: 50px;
+        margin-top: 40px;
+      }
+
+      .about-text {
+        flex: 1;
+        text-align: left;
+      }
+
+      .about-text p {
+        margin-bottom: 20px;
+        line-height: 1.6;
+      }
+
+      .about-image {
+        flex: 1;
+        height: 400px;
+        background-image: url("https://www.mercedes-benz.com/en/classic/_jcr_content/root/slider/sliderchilditems/slideritem/image/MQ7-0-image-20190816095252/01-mercedes-benz-classic-history-1560x686.jpeg");
+        background-size: cover;
+        background-position: center;
+      }
+
+      /* Contact Form */
+      .contact-form {
+        max-width: 800px;
+        margin: 40px auto 0;
+        text-align: left;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 500;
+      }
+
+      .form-group input,
+      .form-group textarea,
+      .form-group select {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ddd;
+        font-family: inherit;
+        font-size: 16px;
+        transition: border-color 0.3s;
+      }
+
+      .form-group input:focus,
+      .form-group textarea:focus,
+      .form-group select:focus {
+        border-color: #999;
+        outline: none;
+      }
+
+      .form-group textarea {
+        height: 150px;
+        resize: vertical;
+      }
+
+      .submit-btn {
+        background-color: #000;
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 16px;
+        transition: background-color 0.3s;
+      }
+
+      .submit-btn:hover {
+        background-color: #333;
+      }
+
+      /* Footer */
+      footer {
+        background-color: #000;
+        color: white;
+        padding: 60px 20px 30px;
+      }
+
+      .footer-content {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        max-width: 1400px;
+        margin: 0 auto;
+        margin-bottom: 40px;
+      }
+
+      .footer-section {
+        flex: 1;
+        min-width: 200px;
+        margin-bottom: 30px;
+        padding-right: 20px;
+      }
+
+      .footer-section h3 {
+        margin-top: 0;
+        margin-bottom: 20px;
+        font-size: 16px;
+        font-weight: 500;
+      }
+
+      .footer-section a {
+        color: #ccc;
+        text-decoration: none;
+        display: block;
+        margin-bottom: 12px;
+        font-size: 14px;
+        transition: color 0.3s;
+      }
+
+      .footer-section a:hover {
+        color: white;
+      }
+
+      .social-icons {
+        display: flex;
+        gap: 15px;
+        margin-top: 20px;
+      }
+
+      .social-icons a {
+        color: white;
+        font-size: 18px;
+        transition: opacity 0.3s;
+      }
+
+      .social-icons a:hover {
+        opacity: 0.7;
+      }
+
+      .copyright {
+        text-align: center;
+        padding-top: 20px;
+        border-top: 1px solid #333;
+        font-size: 14px;
+        color: #999;
+      }
+
+      /* Search Modal */
+      .search-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.9);
+        z-index: 1000;
+        justify-content: center;
+        align-items: flex-start;
+        padding-top: 100px;
+      }
+
+      .search-modal-content {
+        position: relative;
+        width: 80%;
+        max-width: 600px;
+        background-color: white;
+        padding: 30px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      }
+
+      .search-modal-close {
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        color: #333;
+        font-size: 24px;
+        cursor: pointer;
+      }
+
+      .search-form-modal {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .search-form-modal h2 {
+        margin-top: 0;
+        color: #333;
+        text-align: center;
+        font-weight: 400;
+      }
+
+      .search-input-group {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .search-input-group label {
+        font-weight: bold;
+        color: #333;
+      }
+
+      .search-input {
+        padding: 12px;
+        border: 1px solid #ddd;
+        font-size: 16px;
+      }
+
+      .search-options {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+      }
+
+      .search-option {
+        flex: 1;
+        min-width: 120px;
+      }
+
+      .search-submit {
+        background-color: #000;
+        color: white;
+        border: none;
+        padding: 15px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .search-submit:hover {
+        background-color: #333;
+      }
+
+      /* Video Modal */
+      .video-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.9);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .video-modal-content {
+        position: relative;
+        width: 80%;
+        max-width: 900px;
+      }
+
+      .video-modal-close {
+        position: absolute;
+        top: -40px;
+        right: 0;
+        color: white;
+        font-size: 30px;
+        cursor: pointer;
+      }
+
+      .video-modal iframe {
+        width: 100%;
+        height: 500px;
+        border: none;
+      }
+
+      /* Loading Overlay */
+      .loading-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        transition: opacity 0.5s ease;
+      }
+
+      /* Hamster Wheel Styles */
+      .wheel-and-hamster {
+        --dur: 1s;
+        position: relative;
+        width: 12em;
+        height: 12em;
+        font-size: 14px;
+      }
+
+      .wheel,
+      .hamster,
+      .hamster div,
+      .spoke {
+        position: absolute;
+      }
+
+      .wheel,
+      .spoke {
+        border-radius: 50%;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .wheel {
+        background: radial-gradient(
+          100% 100% at center,
+          hsla(0, 0%, 60%, 0) 47.8%,
+          hsl(0, 0%, 60%) 48%
+        );
+        z-index: 2;
+      }
+
+      .hamster {
+        animation: hamster var(--dur) ease-in-out infinite;
+        top: 50%;
+        left: calc(50% - 3.5em);
+        width: 7em;
+        height: 3.75em;
+        transform: rotate(4deg) translate(-0.8em, 1.85em);
+        transform-origin: 50% 0;
+        z-index: 1;
+      }
+
+      .hamster__head {
+        animation: hamsterHead var(--dur) ease-in-out infinite;
+        background: hsl(30, 90%, 55%);
+        border-radius: 70% 30% 0 100% / 40% 25% 25% 60%;
+        box-shadow: 0 -0.25em 0 hsl(30, 90%, 80%) inset,
+          0.75em -1.55em 0 hsl(30, 90%, 90%) inset;
+        top: 0;
+        left: -2em;
+        width: 2.75em;
+        height: 2.5em;
+        transform-origin: 100% 50%;
+      }
+
+      .hamster__ear {
+        animation: hamsterEar var(--dur) ease-in-out infinite;
+        background: hsl(0, 90%, 85%);
+        border-radius: 50%;
+        box-shadow: -0.25em 0 hsl(30, 90%, 55%) inset;
+        top: -0.25em;
+        right: -0.25em;
+        width: 0.75em;
+        height: 0.75em;
+        transform-origin: 50% 75%;
+      }
+
+      .hamster__eye {
+        animation: hamsterEye var(--dur) linear infinite;
+        background-color: hsl(0, 0%, 0%);
+        border-radius: 50%;
+        top: 0.375em;
+        left: 1.25em;
+        width: 0.5em;
+        height: 0.5em;
+      }
+
+      .hamster__nose {
+        background: hsl(0, 90%, 75%);
+        border-radius: 35% 65% 85% 15% / 70% 50% 50% 30%;
+        top: 0.75em;
+        left: 0;
+        width: 0.2em;
+        height: 0.25em;
+      }
+
+      .hamster__body {
+        animation: hamsterBody var(--dur) ease-in-out infinite;
+        background: hsl(30, 90%, 90%);
+        border-radius: 50% 30% 50% 30% / 15% 60% 40% 40%;
+        box-shadow: 0.1em 0.75em 0 hsl(30, 90%, 55%) inset,
+          0.15em -0.5em 0 hsl(30, 90%, 80%) inset;
+        top: 0.25em;
+        left: 2em;
+        width: 4.5em;
+        height: 3em;
+        transform-origin: 17% 50%;
+        transform-style: preserve-3d;
+      }
+
+      .hamster__limb--fr,
+      .hamster__limb--fl {
+        clip-path: polygon(0 0, 100% 0, 70% 80%, 60% 100%, 0% 100%, 40% 80%);
+        top: 2em;
+        left: 0.5em;
+        width: 1em;
+        height: 1.5em;
+        transform-origin: 50% 0;
+      }
+
+      .hamster__limb--fr {
+        animation: hamsterFRLimb var(--dur) linear infinite;
+        background: linear-gradient(
+          hsl(30, 90%, 80%) 80%,
+          hsl(0, 90%, 75%) 80%
+        );
+        transform: rotate(15deg) translateZ(-1px);
+      }
+
+      .hamster__limb--fl {
+        animation: hamsterFLLimb var(--dur) linear infinite;
+        background: linear-gradient(
+          hsl(30, 90%, 90%) 80%,
+          hsl(0, 90%, 85%) 80%
+        );
+        transform: rotate(15deg);
+      }
+
+      .hamster__limb--br,
+      .hamster__limb--bl {
+        border-radius: 0.75em 0.75em 0 0;
+        clip-path: polygon(
+          0 0,
+          100% 0,
+          100% 30%,
+          70% 90%,
+          70% 100%,
+          30% 100%,
+          40% 90%,
+          0% 30%
+        );
+        top: 1em;
+        left: 2.8em;
+        width: 1.5em;
+        height: 2.5em;
+        transform-origin: 50% 30%;
+      }
+
+      .hamster__limb--br {
+        animation: hamsterBRLimb var(--dur) linear infinite;
+        background: linear-gradient(
+          hsl(30, 90%, 80%) 90%,
+          hsl(0, 90%, 75%) 90%
+        );
+        transform: rotate(-25deg) translateZ(-1px);
+      }
+
+      .hamster__limb--bl {
+        animation: hamsterBLLimb var(--dur) linear infinite;
+        background: linear-gradient(
+          hsl(30, 90%, 90%) 90%,
+          hsl(0, 90%, 85%) 90%
+        );
+        transform: rotate(-25deg);
+      }
+
+      .hamster__tail {
+        animation: hamsterTail var(--dur) linear infinite;
+        background: hsl(0, 90%, 85%);
+        border-radius: 0.25em 50% 50% 0.25em;
+        box-shadow: 0 -0.2em 0 hsl(0, 90%, 75%) inset;
+        top: 1.5em;
+        right: -0.5em;
+        width: 1em;
+        height: 0.5em;
+        transform: rotate(30deg) translateZ(-1px);
+        transform-origin: 0.25em 0.25em;
+      }
+
+      .spoke {
+        animation: spoke var(--dur) linear infinite;
+        background: radial-gradient(
+            100% 100% at center,
+            hsl(0, 0%, 60%) 4.8%,
+            hsla(0, 0%, 60%, 0) 5%
+          ),
+          linear-gradient(
+              hsla(0, 0%, 55%, 0) 46.9%,
+              hsl(0, 0%, 65%) 47% 52.9%,
+              hsla(0, 0%, 65%, 0) 53%
+            )
+            50% 50% / 99% 99% no-repeat;
+      }
+
+      /* Hamster Wheel Animations */
+      @keyframes hamster {
+        from,
+        to {
+          transform: rotate(4deg) translate(-0.8em, 1.85em);
+        }
+
+        50% {
+          transform: rotate(0) translate(-0.8em, 1.85em);
+        }
+      }
+
+      @keyframes hamsterHead {
+        from,
+        25%,
+        50%,
+        75%,
+        to {
+          transform: rotate(0);
+        }
+
+        12.5%,
+        37.5%,
+        62.5%,
+        87.5% {
+          transform: rotate(8deg);
+        }
+      }
+
+      @keyframes hamsterEye {
+        from,
+        90%,
+        to {
+          transform: scaleY(1);
+        }
+
+        95% {
+          transform: scaleY(0);
+        }
+      }
+
+      @keyframes hamsterEar {
+        from,
+        25%,
+        50%,
+        75%,
+        to {
+          transform: rotate(0);
+        }
+
+        12.5%,
+        37.5%,
+        62.5%,
+        87.5% {
+          transform: rotate(12deg);
+        }
+      }
+
+      @keyframes hamsterBody {
+        from,
+        25%,
+        50%,
+        75%,
+        to {
+          transform: rotate(0);
+        }
+
+        12.5%,
+        37.5%,
+        62.5%,
+        87.5% {
+          transform: rotate(-2deg);
+        }
+      }
+
+      @keyframes hamsterFRLimb {
+        from,
+        25%,
+        50%,
+        75%,
+        to {
+          transform: rotate(50deg) translateZ(-1px);
+        }
+
+        12.5%,
+        37.5%,
+        62.5%,
+        87.5% {
+          transform: rotate(-30deg) translateZ(-1px);
+        }
+      }
+
+      @keyframes hamsterFLLimb {
+        from,
+        25%,
+        50%,
+        75%,
+        to {
+          transform: rotate(-30deg);
+        }
+
+        12.5%,
+        37.5%,
+        62.5%,
+        87.5% {
+          transform: rotate(50deg);
+        }
+      }
+
+      @keyframes hamsterBRLimb {
+        from,
+        25%,
+        50%,
+        75%,
+        to {
+          transform: rotate(-60deg) translateZ(-1px);
+        }
+
+        12.5%,
+        37.5%,
+        62.5%,
+        87.5% {
+          transform: rotate(20deg) translateZ(-1px);
+        }
+      }
+      @keyframes hamsterBLLimb {
+        from,
+        25%,
+        50%,
+        75%,
+        to {
+          transform: rotate(20deg);
+        }
+
+        12.5%,
+        37.5%,
+        62.5%,
+        87.5% {
+          transform: rotate(-60deg);
+        }
+      }
+
+      @keyframes hamsterTail {
+        from,
+        25%,
+        50%,
+        75%,
+        to {
+          transform: rotate(30deg) translateZ(-1px);
+        }
+
+        12.5%,
+        37.5%,
+        62.5%,
+        87.5% {
+          transform: rotate(10deg) translateZ(-1px);
+        }
+      }
+
+      @keyframes spoke {
+        from {
+          transform: rotate(0);
+        }
+
+        to {
+          transform: rotate(-1turn);
+        }
+      }
+
+      /* Responsive Styles */
+      @media (max-width: 1200px) {
+        .hero-text h1 {
+          font-size: 42px;
+        }
+
+        .about-content {
+          flex-direction: column;
+        }
+
+        .about-image {
+          width: 100%;
+        }
+      }
+
+      @media (max-width: 992px) {
+        .header-content {
+          padding: 0 10px;
+        }
+
+        .nav-links li {
+          margin-right: 15px;
+        }
+
+        .hero-text h1 {
+          font-size: 36px;
+        }
+
+        .content {
+          padding: 40px 15px;
+        }
+
+        .finance-calculator {
+          padding: 30px 20px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .main-header {
+          padding: 15px 0;
+        }
+
+        .header-content {
+          flex-wrap: wrap;
+        }
+
+        .main-nav {
+          order: 3;
+          width: 100%;
+          margin-top: 15px;
+        }
+
+        .nav-links {
+          justify-content: center;
+        }
+
+        .logo {
+          position: static;
+          transform: none;
+          order: 1;
+        }
+
+        .nav-right {
+          order: 2;
+        }
+
+        .hero-text h1 {
+          font-size: 28px;
+        }
+
+        .hero-bottom {
+          flex-direction: column;
+          width: 80%;
+        }
+
+        .hero-bottom a {
+          width: 100%;
+          margin: 5px 0;
+        }
+
+        .content h2 {
+          font-size: 26px;
+        }
+
+        .models-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .calculator-form {
+          grid-template-columns: 1fr;
+        }
+
+        .result-item {
+          flex-direction: column;
+        }
+
+        .result-value {
+          margin-top: 5px;
+        }
+
+        .footer-section {
+          flex: 100%;
+        }
+
+        .video-modal iframe {
+          height: 300px;
+        }
+      }
+
+      @media (max-width: 576px) {
+        .nav-links {
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+
+        .nav-links li {
+          margin: 5px 10px;
+        }
+
+        .hero {
+          height: 80vh;
+        }
+
+        .hero-content {
+          padding: 0 20px;
+        }
+
+        .hero-text h1 {
+          font-size: 24px;
+        }
+
+        .btn-primary {
+          padding: 8px 15px;
+          font-size: 14px;
+        }
+
+        .video-play-button {
+          bottom: 20px;
+          left: 20px;
+        }
+
+        .finance-calculator {
+          padding: 20px 15px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading-overlay">
+      <div
+        aria-label="Orange and tan hamster running in a metal wheel"
+        role="img"
+        class="wheel-and-hamster"
+      >
+        <div class="wheel"></div>
+        <div class="hamster">
+          <div class="hamster__body">
+            <div class="hamster__head">
+              <div class="hamster__ear"></div>
+              <div class="hamster__eye"></div>
+              <div class="hamster__nose"></div>
+            </div>
+            <div class="hamster__limb hamster__limb--fr"></div>
+            <div class="hamster__limb hamster__limb--fl"></div>
+            <div class="hamster__limb hamster__limb--br"></div>
+            <div class="hamster__limb hamster__limb--bl"></div>
+            <div class="hamster__tail"></div>
+          </div>
+        </div>
+        <div class="spoke"></div>
+      </div>
+    </div>
+
+    <!-- Video Modal -->
+    <div class="video-modal" id="video-modal">
+      <div class="video-modal-content">
+        <span class="video-modal-close" id="video-modal-close">&times;</span>
+        <iframe
+          id="youtube-modal-iframe"
+          src=""
+          frameborder="0"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </div>
+
+    <!-- Search Modal -->
+    <div class="search-modal" id="search-modal">
+      <div class="search-modal-content">
+        <span class="search-modal-close" id="search-modal-close">&times;</span>
+        <form class="search-form-modal">
+          <h2>Tìm kiếm xe Mercedes-Benz</h2>
+
+          <div class="search-input-group">
+            <label for="search-model">Dòng xe</label>
+            <select id="search-model" class="search-input">
+              <option value="">Tất cả dòng xe</option>
+              <option value="c-class">C-Class</option>
+              <option value="e-class">E-Class</option>
+              <option value="s-class">S-Class</option>
+              <option value="glc">GLC</option>
+              <option value="gle">GLE</option>
+              <option value="amg">AMG</option>
+              <option value="maybach">Maybach</option>
+            </select>
+          </div>
+
+          <div class="search-options">
+            <div class="search-option">
+              <div class="search-input-group">
+                <label for="search-price-min">Giá từ</label>
+                <select id="search-price-min" class="search-input">
+                  <option value="">Không giới hạn</option>
+                  <option value="1000000000">1 tỷ VNĐ</option>
+                  <option value="2000000000">2 tỷ VNĐ</option>
+                  <option value="3000000000">3 tỷ VNĐ</option>
+                  <option value="5000000000">5 tỷ VNĐ</option>
+                  <option value="7000000000">7 tỷ VNĐ</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="search-option">
+              <div class="search-input-group">
+                <label for="search-price-max">Giá đến</label>
+                <select id="search-price-max" class="search-input">
+                  <option value="">Không giới hạn</option>
+                  <option value="2000000000">2 tỷ VNĐ</option>
+                  <option value="3000000000">3 tỷ VNĐ</option>
+                  <option value="5000000000">5 tỷ VNĐ</option>
+                  <option value="7000000000">7 tỷ VNĐ</option>
+                  <option value="10000000000">10 tỷ VNĐ</option>
+                  <option value="15000000000">15 tỷ VNĐ</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="search-input-group">
+            <label for="search-body">Kiểu dáng</label>
+            <select id="search-body" class="search-input">
+              <option value="">Tất cả kiểu dáng</option>
+              <option value="sedan">Sedan</option>
+              <option value="suv">SUV</option>
+              <option value="coupe">Coupe</option>
+              <option value="convertible">Convertible</option>
+            </select>
+          </div>
+
+          <button type="button" class="search-submit" id="search-submit">
+            Tìm kiếm
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Header (New Style) -->
+    <header class="main-header">
+      <div class="header-content">
+        <div class="main-nav">
+          <ul class="nav-links">
+            <li><a href="#models">Các mẫu xe</a></li>
+            <li><a href="#price-calculator">Mua</a></li>
+            <li><a href="#contact">Dịch vụ</a></li>
+            <li><a href="#about">Thương hiệu</a></li>
+          </ul>
+        </div>
+
+        <div class="logo">
+          <a href="#home">
+            <img
+              src="https://www.mercedes-benz.com/content/dam/brandhub/global/logos/MB-star_n_web.svg/_jcr_content/renditions/original"
+              alt="Mercedes-Benz Logo"
+            />
+          </a>
+        </div>
+
+        <div class="nav-right">
+          <div class="provider-link">
+            <a href="#">Provider/đại lý</a>
+          </div>
+          <div class="search-icon">
+            <button type="button" id="show-search">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+          <div class="language-switcher">
+            <button type="button" id="language-button">
+              <i class="fas fa-globe"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero Section (New Style) -->
+    <div class="hero dark-theme" id="home">
+      <div class="hero-content">
+        <div class="hero-text">
+          <h1>Chuẩn mực<br />Mercedes-Benz.</h1>
+          <a href="#about" class="btn-primary">Tìm hiểu thêm</a>
+        </div>
+      </div>
+      <div class="hero-image">
+        <img
+          src="https://i1-vnexpress.vnecdn.net/2021/11/26/MBC27207.jpg?w=2400&h=0&q=100&dpr=1&fit=crop&s=xmDJtoHlIp4MJh3A8CZKsQ&t=image"
+          alt="Mercedes-Benz S-Class"
+        />
+      </div>
+      <button class="video-play-button" id="hero-video-button">
+        <i class="fas fa-play"></i>
+      </button>
+    </div>
+
+    <!-- Brand Tabs - Ban đầu hiển thị dưới banner -->
+    <div class="brand-tabs" id="brand-tabs">
+      <div class="tab active">
+        <a href="#">Mercedes-Benz</a>
+      </div>
+      <div class="tab amg-tab">
+        <a href="#">
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/AMG_logo.svg/1280px-AMG_logo.svg.png"
+            alt="AMG Logo"
+          />
+        </a>
+      </div>
+      <div class="tab maybach-tab">
+        <a href="#">MAYBACH</a>
+      </div>
+    </div>
+
+    <!-- Phần này sẽ thay thế khoảng trống khi tabs được fixed -->
+    <div class="brand-tabs-spacer" id="brand-tabs-spacer"></div>
+
+    <!-- Thêm một div trống để tránh nội dung bị che khuất bởi fixed tabs -->
+    <div class="brand-tabs-spacer"></div>
+
+    <!-- Main Content -->
+    <div class="content">
+      <section id="models">
+        <h2>Dòng Xe</h2>
+        <p>Khám phá các dòng xe sang trọng và hiện đại của chúng tôi.</p>
+
+        <div class="price-filter">
+          <h3>Lọc theo khoảng giá</h3>
+          <div class="filter-options">
+            <button class="filter-btn active" data-filter="all">Tất cả</button>
+            <button class="filter-btn" data-filter="1-2">1-2 tỷ VNĐ</button>
+            <button class="filter-btn" data-filter="2-3">2-3 tỷ VNĐ</button>
+            <button class="filter-btn" data-filter="3-5">3-5 tỷ VNĐ</button>
+            <button class="filter-btn" data-filter="5+">Trên 5 tỷ VNĐ</button>
+          </div>
+        </div>
+
+        <div class="models-grid">
+          <div class="model-card" data-price-range="1-2">
+            <img
+              src="https://static.chotot.com/storage/chotot-kinhnghiem/xe/2020/08/xe-mercedes-c-class-1.jpg"
+              alt="C-Class"
+              loading="lazy"
+            />
+            <div class="model-info">
+              <h3>C-Class</h3>
+              <p>Sự kết hợp hoàn hảo giữa sự sang trọng và hiệu suất.</p>
+              <div class="model-price">Giá từ: 1.499.000.000 VNĐ</div>
+              <div class="price-range">
+                Phạm vi giá: 1.499.000.000 VNĐ - 1.969.000.000 VNĐ
+              </div>
+              <a href="#" class="btn-explore" data-video="fo00Uh0z9YU"
+                >Xem video giới thiệu</a
+              >
+            </div>
+          </div>
+          <div class="model-card" data-price-range="2-3">
+            <img
+              src="https://media.ed.edmunds-media.com/mercedes-benz/e-class/2025/oem/2025_mercedes-benz_e-class_sedan_amg-e-53-hybrid_fq_oem_1_1280.jpg"
+              alt="E-Class"
+              loading="lazy"
+            />
+            <div class="model-info">
+              <h3>E-Class</h3>
+              <p>Đẳng cấp doanh nhân với công nghệ tiên tiến.</p>
+              <div class="model-price">Giá từ: 2.310.000.000 VNĐ</div>
+              <div class="price-range">
+                Phạm vi giá: 2.310.000.000 VNĐ - 2.950.000.000 VNĐ
+              </div>
+              <a href="#" class="btn-explore" data-video="SUYuGyp76qk"
+                >Xem video giới thiệu</a
+              >
+            </div>
+          </div>
+          <div class="model-card" data-price-range="5+">
+            <img
+              src="https://mercedesphumyhung.com.vn/wp-content/uploads/2024/10/CC3A1c_dC3B2ng_Mercedes_S-Class_11.jpg"
+              alt="S-Class"
+              loading="lazy"
+            />
+            <div class="model-info">
+              <h3>S-Class</h3>
+              <p>Biểu tượng của sự sang trọng và đẳng cấp.</p>
+              <div class="model-price">Giá từ: 5.199.000.000 VNĐ</div>
+              <div class="price-range">
+                Phạm vi giá: 5.199.000.000 VNĐ - 7.469.000.000 VNĐ
+              </div>
+              <a href="#" class="btn-explore" data-video="swFnUvdxSXc"
+                >Xem video giới thiệu</a
+              >
+            </div>
+          </div>
+          <div class="model-card" data-price-range="3-5">
+            <img
+              src="https://mercedesvietnam.com.vn/wp-content/uploads/2021/09/mercedes-benz-gle-400-4matic-coupe-2022-mercedeshcm-com-vn-2.jpg"
+              alt="GLE Coupe"
+              loading="lazy"
+            />
+            <div class="model-info">
+              <h3>GLE Coupe</h3>
+              <p>Sự kết hợp hoàn hảo giữa SUV và Coupe thể thao.</p>
+              <div class="model-price">Giá từ: 4.409.000.000 VNĐ</div>
+              <div class="price-range">
+                Phạm vi giá: 4.409.000.000 VNĐ - 5.499.000.000 VNĐ
+              </div>
+              <a href="#" class="btn-explore" data-video="pbq-CvsviOY"
+                >Xem video giới thiệu</a
+              >
+            </div>
+          </div>
+          <div class="model-card" data-price-range="2-3">
+            <img
+              src="https://hips.hearstapps.com/hmg-prod/images/2023-mercedes-benz-glc-class-102-1654699567.jpg"
+              alt="GLC"
+              loading="lazy"
+            />
+            <div class="model-info">
+              <h3>GLC</h3>
+              <p>SUV hạng sang với thiết kế hiện đại và không gian rộng rãi.</p>
+              <div class="model-price">Giá từ: 2.099.000.000 VNĐ</div>
+              <div class="price-range">
+                Phạm vi giá: 2.099.000.000 VNĐ - 2.699.000.000 VNĐ
+              </div>
+              <a href="#" class="btn-explore" data-video="ArwPQ3oF4PA"
+                >Xem video giới thiệu</a
+              >
+            </div>
+          </div>
+          <div class="model-card" data-price-range="5+">
+            <img
+              src="https://media.ed.edmunds-media.com/mercedes-benz/amg-gt/2022/oem/2022_mercedes-benz_amg-gt_coupe_53_fq_oem_1_1600.jpg"
+              alt="AMG GT"
+              loading="lazy"
+            />
+            <div class="model-info">
+              <h3>AMG GT</h3>
+              <p>Hiệu suất đỉnh cao với thiết kế thể thao đầy mạnh mẽ.</p>
+              <div class="model-price">Giá từ: 11.590.000.000 VNĐ</div>
+              <div class="price-range">
+                Phạm vi giá: 11.590.000.000 VNĐ - 13.890.000.000 VNĐ
+              </div>
+              <a href="#" class="btn-explore" data-video="JbPBHtLstGw"
+                >Xem video giới thiệu</a
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="price-calculator">
+        <h2>Tính toán tài chính</h2>
+        <p>Dự tính chi phí mua xe và khoản thanh toán hàng tháng của bạn</p>
+
+        <div class="finance-calculator">
+          <h3>Tính toán khoản vay mua xe</h3>
+          <form class="calculator-form">
+            <div class="calculator-group">
+              <label for="car-price">Giá xe (VNĐ)</label>
+              <input
+                type="number"
+                id="car-price"
+                value="2000000000"
+                min="1000000000"
+                step="10000000"
+              />
+            </div>
+            <div class="calculator-group">
+              <label for="down-payment">Trả trước (%)</label>
+              <input
+                type="number"
+                id="down-payment"
+                value="20"
+                min="0"
+                max="90"
+              />
+            </div>
+            <div class="calculator-group">
+              <label for="loan-term">Thời hạn vay (năm)</label>
+              <select id="loan-term">
+                <option value="3">3 năm</option>
+                <option value="5" selected>5 năm</option>
+                <option value="7">7 năm</option>
+                <option value="10">10 năm</option>
+              </select>
+            </div>
+            <div class="calculator-group">
+              <label for="interest-rate">Lãi suất (%/năm)</label>
+              <input
+                type="number"
+                id="interest-rate"
+                value="7.5"
+                min="0"
+                max="20"
+                step="0.1"
+              />
+            </div>
+            <button type="button" id="calculate-btn" class="calculate-btn">
+              Tính toán
+            </button>
+          </form>
+
+          <div class="calculator-result-wrapper">
+            <div class="calculator-result" id="calculator-result">
+              <div class="result-header">
+                <h4>Kết quả tính toán</h4>
+              </div>
+              <div class="result-item">
+                <span class="result-label">Khoản vay:</span>
+                <span class="result-value" id="loan-amount"
+                  >1.600.000.000 VNĐ</span
+                >
+              </div>
+              <div class="result-item highlight">
+                <span class="result-label">Thanh toán hàng tháng:</span>
+                <span class="result-value monthly-payment" id="monthly-payment"
+                  >31.975.000 VNĐ</span
+                >
+              </div>
+              <div class="result-item">
+                <span class="result-label">Tổng tiền trả:</span>
+                <span class="result-value" id="total-payment"
+                  >1.918.500.000 VNĐ</span
+                >
+              </div>
+              <div class="result-item">
+                <span class="result-label">Tổng tiền lãi:</span>
+                <span class="result-value" id="total-interest"
+                  >318.500.000 VNĐ</span
+                >
+              </div>
+            </div>
+            <div class="calculator-note">
+              <p>
+                * Kết quả tính toán chỉ mang tính chất tham khảo. Vui lòng liên
+                hệ với tư vấn viên để có thông tin chính xác nhất.
+              </p>
+              <p>
+                * Lãi suất có thể thay đổi theo chính sách của ngân hàng tại
+                thời điểm vay.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="about">
+        <h2>Tìm Hiểu Thêm</h2>
+        <div class="about-content">
+          <div class="about-text">
+            <p>
+              Mercedes-Benz là biểu tượng của sự sang trọng và công nghệ tiên
+              tiến trong ngành công nghiệp ô tô. Với lịch sử hơn 130 năm, chúng
+              tôi luôn dẫn đầu về đổi mới và thiết kế đẳng cấp.
+            </p>
+            <p>
+              Từ những chiếc xe đầu tiên của Karl Benz và Gottlieb Daimler đến
+              những mẫu xe điện hiện đại, Mercedes-Benz luôn cam kết mang đến
+              trải nghiệm lái xe tốt nhất cho khách hàng.
+            </p>
+            <p>
+              Triết lý "The Best or Nothing" của chúng tôi được thể hiện trong
+              từng chi tiết của mỗi chiếc xe, từ thiết kế ngoại thất đến công
+              nghệ an toàn và tính năng tiện nghi.
+            </p>
+          </div>
+          <div class="about-image"></div>
+        </div>
+      </section>
+
+      <section id="contact">
+        <h2>Liên Hệ</h2>
+        <p>
+          Liên hệ với chúng tôi để biết thêm thông tin hoặc đặt lịch lái thử.
+        </p>
+        <div class="contact-form">
+          <form action="#" method="post">
+            <div class="form-group">
+              <label for="name">Họ và tên</label>
+              <input type="text" id="name" name="name" required />
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" required />
+            </div>
+            <div class="form-group">
+              <label for="phone">Số điện thoại</label>
+              <input type="tel" id="phone" name="phone" />
+            </div>
+            <div class="form-group">
+              <label for="model-interest">Dòng xe quan tâm</label>
+              <select id="model-interest" name="model-interest">
+                <option value="">Chọn dòng xe</option>
+                <option value="c-class">C-Class</option>
+                <option value="e-class">E-Class</option>
+                <option value="s-class">S-Class</option>
+                <option value="glc">GLC</option>
+                <option value="gle">GLE Coupe</option>
+                <option value="amg">AMG GT</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="message">Nội dung</label>
+              <textarea id="message" name="message" required></textarea>
+            </div>
+            <button type="submit" class="submit-btn">Gửi thông tin</button>
+          </form>
+        </div>
+      </section>
+    </div>
+
+    <footer>
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>Về chúng tôi</h3>
+          <a href="#">Lịch sử</a>
+          <a href="#">Đội ngũ</a>
+          <a href="#">Tin tức</a>
+          <a href="#">Sự kiện</a>
+        </div>
+        <div class="footer-section">
+          <h3>Sản phẩm</h3>
+          <a href="#">Sedan</a>
+          <a href="#">SUV</a>
+          <a href="#">AMG</a>
+          <a href="#">Maybach</a>
+        </div>
+        <div class="footer-section">
+          <h3>Dịch vụ</h3>
+          <a href="#">Bảo dưỡng</a>
+          <a href="#">Phụ tùng chính hãng</a>
+          <a href="#">Bảo hiểm</a>
+          <a href="#">Tài chính</a>
+        </div>
+        <div class="footer-section">
+          <h3>Kết nối với chúng tôi</h3>
+          <p>Theo dõi chúng tôi trên mạng xã hội</p>
+          <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="copyright">
+        <p>&copy; 2023 Mercedes-Benz. Tất cả quyền được bảo lưu.</p>
+      </div>
+    </footer>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Hiển thị loading overlay
+        const loadingOverlay = document.getElementById("loading-overlay");
+
+        // Ẩn loading overlay sau 2 giây
+        setTimeout(function () {
+          loadingOverlay.style.opacity = "0";
+          setTimeout(function () {
+            loadingOverlay.style.display = "none";
+          }, 500);
+        }, 2000);
+
+        // Xử lý hiển thị modal tìm kiếm
+        const searchModal = document.getElementById("search-modal");
+        const showSearchBtn = document.getElementById("show-search");
+        const closeSearchBtn = document.getElementById("search-modal-close");
+
+        showSearchBtn.addEventListener("click", function () {
+          searchModal.style.display = "flex";
+          document.body.style.overflow = "hidden";
+        });
+
+        closeSearchBtn.addEventListener("click", function () {
+          searchModal.style.display = "none";
+          document.body.style.overflow = "auto";
+        });
+
+        // Đóng modal khi click bên ngoài
+        window.addEventListener("click", function (e) {
+          if (e.target === searchModal) {
+            searchModal.style.display = "none";
+            document.body.style.overflow = "auto";
+          }
+        });
+
+        // Xử lý nút play video ở hero section
+        const heroVideoButton = document.getElementById("hero-video-button");
+        heroVideoButton.addEventListener("click", function () {
+          const videoModal = document.getElementById("video-modal");
+          const videoModalIframe = document.getElementById(
+            "youtube-modal-iframe"
+          );
+          videoModalIframe.src =
+            "https://www.youtube.com/embed/swFnUvdxSXc?autoplay=1";
+          videoModal.style.display = "flex";
+          document.body.style.overflow = "hidden";
+        });
+
+        // Xử lý tìm kiếm
+        document
+          .getElementById("search-submit")
+          .addEventListener("click", function () {
+            const model = document.getElementById("search-model").value;
+            const priceMin = document.getElementById("search-price-min").value;
+            const priceMax = document.getElementById("search-price-max").value;
+            const bodyStyle = document.getElementById("search-body").value;
+
+            alert(`Đang tìm kiếm xe Mercedes-Benz với các tiêu chí:
+           - Dòng xe: ${model || "Tất cả"}
+                 - Giá từ: ${
+                   priceMin
+                     ? parseInt(priceMin) / 1000000000 + " tỷ VNĐ"
+                     : "Không giới hạn"
+                 }
+                 - Giá đến: ${
+                   priceMax
+                     ? parseInt(priceMax) / 1000000000 + " tỷ VNĐ"
+                     : "Không giới hạn"
+                 }
+                 - Kiểu dáng: ${bodyStyle || "Tất cả"}`);
+
+            searchModal.style.display = "none";
+            document.body.style.overflow = "auto";
+
+            // Cuộn đến phần dòng xe
+            document.querySelector("#models").scrollIntoView({
+              behavior: "smooth",
+            });
+          });
+        // JavaScript để xử lý sticky tabs khi cuộn
+        document.addEventListener("DOMContentLoaded", function () {
+          const brandTabs = document.getElementById("brand-tabs");
+          const brandTabsSpacer = document.getElementById("brand-tabs-spacer");
+
+          // Lấy vị trí ban đầu của tabs
+          const tabsOffset = brandTabs.offsetTop;
+
+          // Xử lý sự kiện cuộn
+          window.addEventListener("scroll", function () {
+            if (window.pageYOffset > tabsOffset) {
+              // Khi cuộn quá vị trí ban đầu của tabs
+              brandTabs.classList.add("fixed");
+              brandTabsSpacer.classList.add("active");
+            } else {
+              // Khi cuộn lên trên vị trí ban đầu của tabs
+              brandTabs.classList.remove("fixed");
+              brandTabsSpacer.classList.remove("active");
+            }
+          });
+        });
+
+        // Xử lý lọc theo giá
+        const filterButtons = document.querySelectorAll(".filter-btn");
+        const modelCards = document.querySelectorAll(".model-card");
+
+        filterButtons.forEach((button) => {
+          button.addEventListener("click", function () {
+            // Xóa class active từ tất cả các nút
+            filterButtons.forEach((btn) => btn.classList.remove("active"));
+            // Thêm class active vào nút được click
+            this.classList.add("active");
+
+            const filter = this.getAttribute("data-filter");
+
+            modelCards.forEach((card) => {
+              if (filter === "all") {
+                card.style.display = "block";
+              } else {
+                const priceRange = card.getAttribute("data-price-range");
+                if (priceRange === filter) {
+                  card.style.display = "block";
+                } else {
+                  card.style.display = "none";
+                }
+              }
+            });
+          });
+        });
+
+        // Xử lý tính toán tài chính
+        document
+          .getElementById("calculate-btn")
+          .addEventListener("click", function () {
+            const carPrice = parseFloat(
+              document.getElementById("car-price").value
+            );
+            const downPaymentPercent = parseFloat(
+              document.getElementById("down-payment").value
+            );
+            const loanTerm = parseInt(
+              document.getElementById("loan-term").value
+            );
+            const interestRate = parseFloat(
+              document.getElementById("interest-rate").value
+            );
+
+            // Tính toán
+            const downPayment = carPrice * (downPaymentPercent / 100);
+            const loanAmount = carPrice - downPayment;
+            const monthlyInterestRate = interestRate / 100 / 12;
+            const numberOfPayments = loanTerm * 12;
+
+            const monthlyPayment =
+              (loanAmount *
+                monthlyInterestRate *
+                Math.pow(1 + monthlyInterestRate, numberOfPayments)) /
+              (Math.pow(1 + monthlyInterestRate, numberOfPayments) - 1);
+
+            const totalPayment = monthlyPayment * numberOfPayments;
+            const totalInterest = totalPayment - loanAmount;
+
+            // Hiển thị kết quả
+            document.getElementById("loan-amount").textContent =
+              formatCurrency(loanAmount);
+            document.getElementById("monthly-payment").textContent =
+              formatCurrency(monthlyPayment);
+            document.getElementById("total-payment").textContent =
+              formatCurrency(totalPayment);
+            document.getElementById("total-interest").textContent =
+              formatCurrency(totalInterest);
+          });
+
+        // Hàm định dạng tiền tệ
+        function formatCurrency(amount) {
+          return (
+            new Intl.NumberFormat("vi-VN").format(Math.round(amount)) + " VNĐ"
+          );
+        }
+
+        // Xử lý sự kiện chuyển đổi ngôn ngữ
+        const languageButton = document.getElementById("language-button");
+        languageButton.addEventListener("click", function () {
+          alert("Chức năng chuyển đổi ngôn ngữ sẽ được phát triển sau!");
+        });
+
+        // Xử lý sự kiện cuộn mượt cho menu
+        const navLinks = document.querySelectorAll(".nav-links a");
+        navLinks.forEach((link) => {
+          link.addEventListener("click", function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute("href");
+            if (targetId.startsWith("#")) {
+              const targetElement = document.querySelector(targetId);
+              if (targetElement) {
+                window.scrollTo({
+                  top: targetElement.offsetTop,
+                  behavior: "smooth",
+                });
+              }
+            } else {
+              window.location.href = targetId;
+            }
+          });
+        });
+
+        // Xử lý form liên hệ
+        const contactForm = document.querySelector(".contact-form form");
+        if (contactForm) {
+          contactForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+            // Xử lý gửi form liên hệ
+            alert(
+              "Cảm ơn bạn đã liên hệ với chúng tôi! Chúng tôi sẽ phản hồi sớm nhất có thể."
+            );
+            this.reset();
+          });
+        }
+
+        // Xử lý modal video
+        const videoModal = document.getElementById("video-modal");
+        const videoModalIframe = document.getElementById(
+          "youtube-modal-iframe"
+        );
+        const videoModalClose = document.getElementById("video-modal-close");
+        const videoButtons = document.querySelectorAll(
+          ".btn-explore[data-video]"
+        );
+
+        // Hiển thị modal khi click vào nút xem video
+        videoButtons.forEach((button) => {
+          button.addEventListener("click", function (e) {
+            e.preventDefault();
+            const videoId = this.getAttribute("data-video");
+            videoModalIframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+            videoModal.style.display = "flex";
+            document.body.style.overflow = "hidden"; // Ngăn cuộn trang khi modal hiển thị
+          });
+        });
+
+        // Đóng modal
+        videoModalClose.addEventListener("click", function () {
+          videoModal.style.display = "none";
+          videoModalIframe.src = "";
+          document.body.style.overflow = "auto"; // Cho phép cuộn trang trở lại
+        });
+
+        // Đóng modal khi click bên ngoài
+        window.addEventListener("click", function (e) {
+          if (e.target === videoModal) {
+            videoModal.style.display = "none";
+            videoModalIframe.src = "";
+            document.body.style.overflow = "auto";
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
