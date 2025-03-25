@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Ứng dụng Pseudo Element</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      .tooltip {
+        position: relative;
+        display: inline-block;
+        margin: 20px;
+      }
+      .tooltip span {
+        visibility: hidden;
+        width: 120px;
+        background-color: #333;
+        color: #fff;
+        text-align: center;
+        border-radius: 6px;
+        padding: 5px;
+        position: absolute;
+        bottom: 125%;
+        left: 50%;
+        transform: translateX(-50%);
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+      .tooltip span::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: #333 transparent transparent transparent;
+      }
+      .tooltip:hover span {
+        visibility: visible;
+        opacity: 1;
+      }
+
+      .slider {
+        width: 300px;
+        overflow: hidden;
+        position: relative;
+      }
+      .slides {
+        display: flex;
+        width: 300%;
+        transition: transform 0.5s;
+      }
+      .slide {
+        width: 100%;
+        height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 24px;
+      }
+      .slide:nth-child(1) {
+        background-color: #2b8dce;
+      }
+      .slide:nth-child(2) {
+        background-color: #571f19;
+      }
+      .slide:nth-child(3) {
+        background-color: #0f6232;
+      }
+
+      input[name="slider"] {
+        display: none;
+      }
+      .controls {
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 10px;
+      }
+      .controls label {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.5);
+        cursor: pointer;
+      }
+      #slide1:checked ~ .slides {
+        transform: translateX(0);
+      }
+      #slide2:checked ~ .slides {
+        transform: translateX(-33.33%);
+      }
+      #slide3:checked ~ .slides {
+        transform: translateX(-66.66%);
+      }
+      #slide1:checked ~ .controls label:nth-child(1),
+      #slide2:checked ~ .controls label:nth-child(2),
+      #slide3:checked ~ .controls label:nth-child(3) {
+        background: white;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="tooltip">
+      ngphong
+      <span>demo demo</span>
+    </div>
+    <div class="slider">
+      <input type="radio" name="slider" id="slide1" checked />
+      <input type="radio" name="slider" id="slide2" />
+      <input type="radio" name="slider" id="slide3" />
+
+      <div class="slides">
+        <div class="slide">1</div>
+        <div class="slide">2</div>
+        <div class="slide">3</div>
+      </div>
+
+      <div class="controls">
+        <label for="slide1"></label>
+        <label for="slide2"></label>
+        <label for="slide3"></label>
+      </div>
+    </div>
+  </body>
+</html>
